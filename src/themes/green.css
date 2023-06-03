@@ -1,0 +1,9 @@
+@tailwind components;
+
+header {
+    @apply bg-green-500;
+}
+
+#top-board, footer {
+    @apply bg-green-50;
+}

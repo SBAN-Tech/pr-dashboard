@@ -1,0 +1,9 @@
+@tailwind components;
+
+header {
+    @apply bg-lime-500;
+}
+
+#top-board, footer {
+    @apply bg-lime-50;
+}

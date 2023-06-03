@@ -1,0 +1,9 @@
+@tailwind components;
+
+header {
+    @apply bg-rose-500;
+}
+
+#top-board, footer {
+    @apply bg-rose-50;
+}

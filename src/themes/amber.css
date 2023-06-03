@@ -1,0 +1,9 @@
+@tailwind components;
+
+header {
+    @apply bg-amber-500;
+}
+
+#top-board, footer {
+    @apply bg-amber-50;
+}

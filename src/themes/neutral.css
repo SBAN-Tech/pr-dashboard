@@ -1,0 +1,9 @@
+@tailwind components;
+
+header {
+    @apply bg-neutral-500;
+}
+
+#top-board, footer {
+    @apply bg-neutral-50;
+}

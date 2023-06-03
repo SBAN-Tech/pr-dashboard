@@ -1,0 +1,14 @@
+title = "プレラ名"
+tagline = "キャッチコピー的な"
+description = "ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力ここに詳細を入力"
+hashtag = "タグ"
+favicon = "/favicon.svg"
+logo = "https://yt3.googleusercontent.com/ytc/AGIKgqN0YAABDVGuQZQiMJKEvtXKnb3PfAG1Dxb52g=s720-c-k-c0x00ffffff-no-rj"
+copyrights = [
+    "2023- SBAN-Tech"
+]
+enjoy = "これぞ界隈流プレラの楽しみ方だ!!!"
+theme = "teal"
+start = 2024-05-02T00:00:00+09:00
+limit = 2024-05-09T00:00:00+09:00
+end = 2024-05-10T00:00:00+09:00

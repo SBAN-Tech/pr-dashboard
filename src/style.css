@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&family=Shippori+Mincho:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root, html, body {
+    @apply w-full h-full flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+}
+
+h1 {
+    @apply text-4xl;
+}
+
+h2 {
+    @apply text-3xl;
+}
+
+h3 {
+    @apply text-2xl;
+}
+
+h4 {
+    @apply text-xl;
+}
+
+h5 {
+    @apply text-lg;
+}
+
+a {
+    @apply border-b-2 border-neutral-500;
+}
+
+a:hover, a:focus, a:active {
+    @apply border-neutral-700;
+}
+
+button {
+    @apply block rounded border border-neutral-600 bg-white w-full p-1 text-center;
+}
+
+header {
+    @apply flex items-center gap-2 w-full text-white px-4 py-3 z-50 fixed text-xl;
+}
+header a {
+    @apply border-none;
+}
+
+.content {
+    @apply w-full pt-[3.25rem] pb-4;
+}
+
+#top-board {
+    @apply w-full p-4;
+}
+
+#top-board-content {
+    @apply w-9/12 grid grid-cols-5 gap-4 mx-auto;
+}
+
+div, main {
+    @apply flex flex-col gap-2;
+}
+
+main {
+    @apply w-10/12 pt-4 mx-auto text-center;
+}
+
+footer {
+    @apply w-full text-neutral-600 text-xs p-4 mt-auto text-center;
+}
+
+footer a {
+    @apply border-b-2 border-neutral-400;
+}
+
+footer a:hover, footer a:focus, footer a:active {
+    @apply border-neutral-500;
+}

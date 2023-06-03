@@ -1,0 +1,9 @@
+@tailwind components;
+
+header {
+    @apply bg-fuchsia-500;
+}
+
+#top-board, footer {
+    @apply bg-fuchsia-50;
+}
