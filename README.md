@@ -28,7 +28,7 @@ Firebase CondoleからFirebaseプロジェクトを作成し、さらにその�
 # Contribution
 手伝ってください。
 
-<span style="opacity: 0.5; font-size: 0.75em;">すべあな界隈技術部に入りたい方は[仮設参加申請フォーム](https://forms.gle/8HRm74boxdpkfWRp6)へお願いします。</span>
+すべあな界隈技術部に入りたい方は[仮設参加申請フォーム](https://forms.gle/8HRm74boxdpkfWRp6)へお願いします。
 
 # License
 MIT Licenseで公開しています。
