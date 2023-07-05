@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&family=Shippori+Mincho:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons+Sharp");
 
 @tailwind base;
 @tailwind components;
@@ -7,6 +8,10 @@
 
 :root, html, body {
     @apply w-full h-full flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal;
+}
+
+* {
+    @apply transition-all ease-in-out duration-300 delay-0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -41,12 +46,54 @@ a:hover, a:focus, a:active {
     @apply border-neutral-700;
 }
 
+input:not([type="button"]), select, textarea {
+    @apply min-h-[1.5rem] border-2 border-neutral-200 rounded bg-transparent p-1 outline-none;
+}
+
+input[type="datetime-local"], input[type="time"] {
+    @apply text-center;
+}
+
 button {
-    @apply block rounded border border-neutral-600 bg-white w-full p-1 text-center;
+    @apply block rounded border w-full p-1 text-white text-center bg-[--primary-500] border-[--primary-500];
+}
+
+button:hover, button:focus, button:active {
+    @apply shadow-md;
+}
+
+button#white-button {
+    @apply border-neutral-500 bg-white text-neutral-800;
+}
+
+button#white-button:hover, button#white-button:focus, button#white-button:active {
+    @apply text-[--primary-600] border-[--primary-500];
+}
+
+button:disabled {
+    @apply border-neutral-400 bg-neutral-400 text-white shadow-none;
+}
+
+input:not([type="button"]):hover, input:not([type="button"]):focus, input:not([type="button"]):active,
+select:hover, select:focus, select:active,
+textarea:hover, textarea:focus, textarea:active {
+    @apply border-[--primary-500];
+}
+
+table {
+    @apply border-separate border-spacing-x-2 border-spacing-y-4 -ml-2;
+}
+
+th, td {
+    @apply py-2;
+}
+
+th {
+    @apply font-normal text-white bg-[--primary-600];
 }
 
 header {
-    @apply flex items-center gap-2 w-full text-white px-4 py-3 z-50 fixed text-xl;
+    @apply flex items-center gap-2 w-full text-white px-4 py-3 z-50 fixed text-xl bg-[--primary-500];
 }
 header a {
     @apply border-none;
@@ -57,11 +104,11 @@ header a {
 }
 
 #top-board {
-    @apply w-full p-4;
+    @apply w-full p-4 bg-[--primary-100];
 }
 
 #top-board-content {
-    @apply w-9/12 grid grid-cols-5 gap-4 mx-auto;
+    @apply w-9/12 grid sm:grid-cols-5 gap-4 mx-auto;
 }
 
 div, main {
@@ -73,7 +120,7 @@ main {
 }
 
 footer {
-    @apply w-full text-neutral-600 text-xs p-4 mt-auto text-center;
+    @apply w-full text-neutral-600 text-xs p-4 mt-auto text-center bg-[--primary-100];
 }
 
 footer a {
@@ -82,4 +129,38 @@ footer a {
 
 footer a:hover, footer a:focus, footer a:active {
     @apply border-neutral-500;
+}
+
+#timetable {
+    @apply flex flex-col gap-4 mt-4;
+}
+
+#timetable-content {
+    @apply border rounded border-neutral-200 p-4;
+}
+
+#timetable-content:hover {
+    @apply shadow-sm;
+}
+
+dialog {
+    @apply max-w-none max-h-none m-auto w-full h-full sm:w-10/12 sm:h-5/6 sm:rounded open:flex open:flex-col;
+}
+
+#dialog-close {
+    @apply border-none bg-transparent text-neutral-800 hover:shadow-none focus:shadow-none active:shadow-none w-auto p-3 -mt-4 -ml-4 mr-auto text-2xl fixed;
+}
+
+.material-icons-sharp {
+    font-size: inherit;
+    line-height: inherit;
+    @apply inline-flex;
+}
+
+#hamburger {
+    @apply w-full h-full fixed top-0 left-0 text-white bg-[--primary-600] -ml-[100vw];
+}
+
+#hamburger#hamberger-open {
+    @apply ml-0;
 }

@@ -1,9 +1,0 @@
-@tailwind components;
-
-header {
-    @apply bg-teal-500;
-}
-
-#top-board, footer {
-    @apply bg-teal-50;
-}

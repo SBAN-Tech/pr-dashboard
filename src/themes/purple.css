@@ -1,9 +1,0 @@
-@tailwind components;
-
-header {
-    @apply bg-purple-500;
-}
-
-#top-board, footer {
-    @apply bg-purple-50;
-}

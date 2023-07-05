@@ -7,7 +7,15 @@ logo = "https://yt3.googleusercontent.com/ytc/AGIKgqN0YAABDVGuQZQiMJKEvtXKnb3PfA
 copyrights = [
     "2023- SBAN-Tech"
 ]
-enjoy = "これぞ界隈流プレラの楽しみ方だ!!!"
+categories = [
+    "イベント",
+    "模倣",
+    "ネタ模倣",
+    "ネタ動画",
+    "オリジナル曲",
+    "OKDさん",
+    "その他"
+]
 theme = "teal"
 start = 2024-05-02T00:00:00+09:00
 limit = 2024-05-09T00:00:00+09:00

@@ -1,9 +1,0 @@
-@tailwind components;
-
-header {
-    @apply bg-yellow-500;
-}
-
-#top-board, footer {
-    @apply bg-yellow-50;
-}

@@ -1,9 +1,0 @@
-@tailwind components;
-
-header {
-    @apply bg-violet-500;
-}
-
-#top-board, footer {
-    @apply bg-violet-50;
-}

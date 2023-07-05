@@ -1,9 +1,0 @@
-@tailwind components;
-
-header {
-    @apply bg-stone-500;
-}
-
-#top-board, footer {
-    @apply bg-stone-50;
-}

@@ -6,7 +6,7 @@ interface Config {
     favicon: string;
     logo: string;
     copyrights: string[];
-    enjoy: string;
+    categories: string[];
     theme: string;
     start: Date;
     limit: Date;

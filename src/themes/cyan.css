@@ -1,9 +1,0 @@
-@tailwind components;
-
-header {
-    @apply bg-cyan-500;
-}
-
-#top-board, footer {
-    @apply bg-cyan-50;
-}

@@ -1,5 +1,5 @@
 <script lang=ts>
-    import conf from '../config.toml';
+	import conf from '../config.toml';
 </script>
 
 <svelte:head>
@@ -8,12 +8,12 @@
 
 <div id="top-board">
     <div id="top-board-content">
-        <div class="col-span-2">
+        <div class="sm:col-span-2">
             <p>
                 <img class="w-full" src={conf.logo} alt="logo" />
             </p>
         </div>
-        <div class="col-span-3">
+        <div class="sm:col-span-3">
             <h2 class="text-center font-serif">{conf.tagline}</h2>
             <p>{conf.description}</p>
             {#if new Date() > conf.limit}
@@ -25,7 +25,7 @@
 </div>
 <main>
     <div class="grid sm:grid-cols-2 gap-4">
-        <button title="#{conf.hashtag}をみる" on:click={() => window.open("https://twitter.com/hashtag/" + conf.hashtag)}>#{conf.hashtag}をみる</button>
-        <button title="#{conf.hashtag}でつぶやく" on:click={() => window.open("https://twitter.com/intent/tweet?hashtags=" + conf.hashtag)}>#{conf.hashtag}でつぶやく</button>
+        <button id="white-button" title="#{conf.hashtag}をみる" on:click={() => window.open("https://twitter.com/hashtag/" + conf.hashtag)}>#{conf.hashtag}をみる</button>
+        <button id="white-button" title="#{conf.hashtag}でつぶやく" on:click={() => window.open("https://twitter.com/intent/tweet?hashtags=" + conf.hashtag)}>#{conf.hashtag}でつぶやく</button>
     </div>
 </main>
