@@ -51,7 +51,7 @@ input:not([type="button"]), select, textarea {
 }
 
 input[type="datetime-local"], input[type="time"] {
-    @apply text-center;
+    @apply text-left;
 }
 
 button {

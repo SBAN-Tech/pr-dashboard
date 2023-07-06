@@ -191,7 +191,7 @@
     </div>
 </dialog>
 
-<dialog bind:this={addcontent} class="text-center">
+<dialog bind:this={addcontent} class="text-left">
     <button title="閉じる" id="dialog-close" on:click={() => addcontent.close()}>
         <span class="material-icons-sharp">close</span>
     </button>
