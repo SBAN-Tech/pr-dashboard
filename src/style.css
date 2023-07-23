@@ -55,7 +55,7 @@ input[type="datetime-local"], input[type="time"] {
 }
 
 button {
-    @apply block rounded border w-full p-1 text-white text-center bg-[--primary-500] border-[--primary-500];
+    @apply flex rounded border w-full p-1 text-white items-center justify-center bg-[--primary-500] border-[--primary-500];
 }
 
 button:hover, button:focus, button:active {
@@ -93,10 +93,35 @@ th {
 }
 
 header {
-    @apply flex items-center gap-2 w-full text-white px-4 py-3 z-50 fixed text-xl bg-[--primary-500];
+    @apply flex items-center gap-2 w-full text-white px-4 py-3 z-30 fixed text-xl bg-[--primary-500];
 }
-header a {
+
+#hamburger {
+    @apply w-full h-full fixed grid sm:hidden grid-cols-7 gap-0 top-0 left-0 z-50 -ml-[100vw];
+}
+
+#hamburger.hamburger-open {
+    @apply ml-0;
+}
+
+#menu {
+    @apply flex flex-col p-4 col-span-5 bg-white;
+}
+
+#hamburger-item {
+    @apply pl-6 pr-4 py-3 hover:bg-neutral-100 focus:bg-neutral-100 active:bg-neutral-100;
+}
+
+header a, #menu a {
     @apply border-none;
+}
+
+#wrapper {
+    @apply hidden bg-black opacity-0 fixed top-0 left-0 w-full h-full z-40;
+}
+
+#wrapper.hamburger-open {
+    @apply block sm:hidden opacity-30;
 }
 
 .content {
@@ -147,20 +172,16 @@ dialog {
     @apply max-w-none max-h-none m-auto w-full h-full sm:w-10/12 sm:h-5/6 sm:rounded open:flex open:flex-col;
 }
 
+#icon-button {
+    @apply border-none bg-transparent hover:shadow-none focus:shadow-none active:shadow-none w-auto min-h-0 p-0;
+}
+
 #dialog-close {
-    @apply border-none bg-transparent text-neutral-800 hover:shadow-none focus:shadow-none active:shadow-none w-auto p-3 -mt-4 -ml-4 mr-auto text-2xl fixed;
+    @apply border-none bg-transparent text-neutral-800 hover:shadow-none focus:shadow-none active:shadow-none w-auto p-2 -mt-4 -ml-4 mr-auto text-2xl fixed;
 }
 
 .material-icons-sharp {
     font-size: inherit;
     line-height: inherit;
-    @apply inline-flex;
-}
-
-#hamburger {
-    @apply w-full h-full fixed top-0 left-0 text-white bg-[--primary-600] -ml-[100vw];
-}
-
-#hamburger#hamberger-open {
-    @apply ml-0;
+    @apply inline-flex items-center;
 }
