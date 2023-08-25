@@ -13,9 +13,9 @@
                 <img class="w-full" src={conf.logo} alt="logo" />
             </p>
         </div>
-        <div class="sm:col-span-3">
+        <div class="sm:col-span-3 flex flex-col">
             <h2 class="text-center font-serif">{conf.tagline}</h2>
-            <p>{conf.description}</p>
+            <p class="flex-1">{conf.description}</p>
             {#if new Date() > conf.limit}
                 <p class="font-['Reggae_One'] text-xl text-red-600">募集は終了しました</p>
             {/if}
