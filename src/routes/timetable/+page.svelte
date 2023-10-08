@@ -2,7 +2,11 @@
     import { Timestamp, collection, addDoc } from 'firebase/firestore';
     import { db } from '$lib/firebase';
     import { collectionStore } from 'sveltefire';
+    import { format, utcToZonedTime } from 'date-fns-tz';
+    import Duration from '$lib/duration.svelte';
     import conf from '../../config.toml';
+
+    let d: string[];
 
     interface Content {
         title: string;
@@ -70,6 +74,7 @@
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
+    let sent: HTMLDialogElement;
 
     const openvinfo = (c: Content) => {
         vinfo_content = c;
@@ -83,7 +88,6 @@
     };
 
     const contentadd = async () => {
-        let d: string[] = acontent.duration.split(":");
         let send: Send = {
             title: acontent.title,
             auther: acontent.auther,
@@ -104,6 +108,7 @@
         }
 
         addcontent.close();
+        sent.showModal();
 
         acontent = {
             title: "",
@@ -203,9 +208,10 @@
         <h3>動画ID</h3>
         <input type="text" bind:value={acontent.id} />
         <h3>公開日時</h3>
-        <input type="datetime-local" bind:value={acontent.time} min={conf.start.toISOString().slice(0, -1)} max={conf.end.toISOString().slice(0, -1)} />
+        <p>タイムゾーンは{format(utcToZonedTime(new Date(), conf.timezone), 'zzz', {timeZone: conf.timezone})}でお願いします</p>
+        <input type="datetime-local" bind:value={acontent.time} min={format(utcToZonedTime(conf.start, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} max={format(utcToZonedTime(conf.end, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} />
         <h3>動画の長さ</h3>
-        <input type="time" bind:value={acontent.duration} step="1" />
+        <Duration bind:value={d} />
         <h3>親の長さ</h3>
         <select bind:value={acontent.countdown}>
             <option value={1}>1分</option>
@@ -223,5 +229,13 @@
         <h3>概要</h3>
         <textarea bind:value={acontent.description}></textarea>
         <button on:click={() => contentadd()}>登録</button>
+    </div>
+</dialog>
+
+<dialog bind:this={sent} class="h-fit sm:w-1/2 w-10/12 text-left">
+    <div class="flex flex-col gap-2">
+        <h2 class="text-center">登録完了</h2>
+        <p>タイムテーブルへの登録が完了しました。</p>
+        <button on:click={() => sent.close()}>閉じる</button>
     </div>
 </dialog>

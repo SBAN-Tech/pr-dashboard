@@ -11,6 +11,7 @@ interface Config {
     start: Date;
     limit: Date;
     end: Date;
+    timezone: string;
 }
 
 declare module '*.toml' {

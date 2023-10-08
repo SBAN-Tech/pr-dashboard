@@ -2,7 +2,7 @@
     import '../style.css';
     import conf from '../config.toml';
     import { style } from 'svelte-body';
-    import styles from "$lib/theme";
+    import styles from '$lib/theme';
 
     interface Pages {
         name: string;

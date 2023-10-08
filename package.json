@@ -43,6 +43,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/marked": "^5.0.1",
+		"date-fns-tz": "^2.0.0",
 		"firebase": "^9.23.0",
 		"firebase-tools": "^12.5.2",
 		"marked": "^5.1.2",

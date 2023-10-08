@@ -1,6 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&family=Shippori+Mincho:wght@400;600&display=swap');
+@import url('https://rsms.me/inter/inter.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Shippori+Mincho:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons+Sharp");
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Sharp');
 
 @tailwind base;
 @tailwind components;
@@ -8,6 +9,7 @@
 
 :root, html, body {
     @apply w-full h-full flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal;
+    font-feature-settings: "ss01";
 }
 
 * {
@@ -46,7 +48,7 @@ a:hover, a:focus, a:active {
     @apply border-neutral-700;
 }
 
-input:not([type="button"]), select, textarea {
+input:not([type="button"]), select, textarea, #duration {
     @apply min-h-[1.5rem] border-2 border-neutral-200 rounded bg-transparent p-1 outline-none;
 }
 
@@ -76,8 +78,14 @@ button:disabled {
 
 input:not([type="button"]):hover, input:not([type="button"]):focus, input:not([type="button"]):active,
 select:hover, select:focus, select:active,
-textarea:hover, textarea:focus, textarea:active {
+textarea:hover, textarea:focus, textarea:active,
+#duration:hover, #duration:focus, #duration:active,
+#duration:has(input:hover), #duration:has(input:focus), #duration:has(input:active) {
     @apply border-[--primary-500];
+}
+
+#duration input {
+    @apply w-5 p-0 border-none rounded-none;
 }
 
 table {
