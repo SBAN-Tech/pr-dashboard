@@ -9,7 +9,11 @@
 
 :root, html, body {
     @apply w-full h-full flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal;
-    font-feature-settings: "ss01";
+    font-feature-settings: "calt",
+    "case",
+    "ss01",
+    "cv05",
+    "cv07";
 }
 
 * {
