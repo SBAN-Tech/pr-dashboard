@@ -48,8 +48,44 @@ a {
     @apply border-b-2 border-neutral-500;
 }
 
-a:hover, a:focus, a:active {
+a:is(:hover, :focus, :active) {
     @apply border-neutral-700;
+}
+
+ul, ol {
+    @apply list-inside text-left;
+}
+
+ul {
+    @apply list-disc;
+}
+
+ol {
+    @apply list-decimal;
+}
+
+pre, code, samp, kbd {
+    @apply font-mono;
+}
+
+pre {
+    @apply p-4 overflow-x-scroll;
+}
+
+pre:not(:has(code)) {
+    @apply border border-neutral-400;
+}
+
+pre:has(code) {
+    @apply bg-neutral-100;
+}
+
+samp {
+    @apply bg-neutral-100 border-2 border-neutral-100;
+}
+
+:not(pre, samp) > :is(code, kbd) {
+    @apply rounded-sm bg-neutral-100 border-2 border-neutral-100;
 }
 
 input:not([type="button"]), select, textarea, #duration {
@@ -64,7 +100,7 @@ button {
     @apply flex rounded border w-full p-1 text-white items-center justify-center bg-[--primary-500] border-[--primary-500];
 }
 
-button:hover, button:focus, button:active {
+button:is(:hover, :focus, :active) {
     @apply shadow-md;
 }
 
@@ -72,7 +108,7 @@ button#white-button {
     @apply border-neutral-500 bg-white text-neutral-800;
 }
 
-button#white-button:hover, button#white-button:focus, button#white-button:active {
+button#white-button:is(:hover, :focus, :active) {
     @apply text-[--primary-600] border-[--primary-500];
 }
 
@@ -80,12 +116,12 @@ button:disabled {
     @apply border-neutral-400 bg-neutral-400 text-white shadow-none;
 }
 
-input:not([type="button"]):hover, input:not([type="button"]):focus, input:not([type="button"]):active,
-select:hover, select:focus, select:active,
-textarea:hover, textarea:focus, textarea:active,
-#duration:hover, #duration:focus, #duration:active,
-#duration:has(input:hover), #duration:has(input:focus), #duration:has(input:active) {
-    @apply border-[--primary-500];
+input:not([type="button"]):is(:hover, :focus, :active),
+select:is(:hover, :focus, :active),
+textarea:is(:hover, :focus, :focus-visible, :active),
+#duration:is(:hover, :focus, :active),
+#duration:has(input:is(:hover, :focus, :active)) {
+    @apply border-[--primary-500] outline-none;
 }
 
 #duration input {
@@ -120,11 +156,15 @@ header {
     @apply flex flex-col p-4 col-span-5 bg-white;
 }
 
+:is(header, #menu) ul {
+    @apply list-none;
+}
+
 #hamburger-item {
     @apply pl-6 pr-4 py-3 hover:bg-neutral-100 focus:bg-neutral-100 active:bg-neutral-100;
 }
 
-header a, #menu a {
+:is(header ,#menu) a {
     @apply border-none;
 }
 
@@ -164,7 +204,7 @@ footer a {
     @apply border-b-2 border-neutral-400;
 }
 
-footer a:hover, footer a:focus, footer a:active {
+footer a:is(:hover, :focus, :active) {
     @apply border-neutral-500;
 }
 

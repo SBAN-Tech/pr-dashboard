@@ -3,6 +3,9 @@
     import { db } from '$lib/firebase';
     import { collectionStore } from 'sveltefire';
     import { format, utcToZonedTime } from 'date-fns-tz';
+    import Markdown from 'svelte-exmarkdown';
+	import { gfmPlugin } from 'svelte-exmarkdown/gfm';
+    import hljs from 'highlight.js';
     import Duration from '$lib/duration.svelte';
     import conf from '../../config.toml';
 
@@ -66,7 +69,7 @@
         auther: "",
         time: "",
         duration: "",
-        countdown: 0,
+        countdown: 1,
         category: "",
         description: "",
         id: ""
@@ -79,6 +82,7 @@
     const openvinfo = (c: Content) => {
         vinfo_content = c;
         vinfo.showModal();
+        hljs.highlightAll();
     };
 
     const getduration = (i: number) => {
@@ -115,7 +119,7 @@
             auther: "",
             time: "",
             duration: "",
-            countdown: 0,
+            countdown: 1,
             category: "",
             description: "",
             id: ""
@@ -171,7 +175,7 @@
         </div>
         <div>
             <h3>動画情報</h3>
-            <p>{vinfo_content.description}</p>
+            <Markdown md={vinfo_content.description} plugins={[gfmPlugin()]} />
             <table>
                 <tbody>
                     <tr>
@@ -227,7 +231,8 @@
             {/each}
         </select>
         <h3>概要</h3>
-        <textarea bind:value={acontent.description}></textarea>
+        <p>Markdownが使えます。</p>
+        <textarea bind:value={acontent.description} class="h-40 transition-colors transi"></textarea>
         <button on:click={() => contentadd()}>登録</button>
     </div>
 </dialog>

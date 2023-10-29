@@ -1,0 +1,90 @@
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  @apply text-rose-600;
+  /* prettylights-syntax-keyword */
+}
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  @apply text-violet-600;
+  /* prettylights-syntax-entity */
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  @apply text-blue-600;
+  /* prettylights-syntax-constant */
+}
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  @apply text-indigo-600;
+  /* prettylights-syntax-string */
+}
+.hljs-built_in,
+.hljs-symbol {
+  @apply text-orange-600;
+  /* prettylights-syntax-variable */
+}
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  @apply text-neutral-500;
+  /* prettylights-syntax-comment */
+}
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  @apply text-green-600;
+  /* prettylights-syntax-entity-tag */
+}
+.hljs-subst {
+  @apply text-slate-700;
+  /* prettylights-syntax-storage-modifier-import */
+}
+.hljs-section {
+  @apply text-blue-700 font-bold;
+  /* prettylights-syntax-markup-heading */
+}
+.hljs-bullet {
+  @apply text-amber-600;
+  /* prettylights-syntax-markup-list */
+}
+.hljs-emphasis {
+  @apply text-slate-800 italic;
+  /* prettylights-syntax-markup-italic */
+}
+.hljs-strong {
+  @apply text-slate-800 font-bold;
+  /* prettylights-syntax-markup-bold */
+}
+.hljs-addition {
+  @apply text-emerald-600;
+  /* prettylights-syntax-markup-inserted */
+}
+.hljs-deletion {
+  @apply text-red-600;
+  /* prettylights-syntax-markup-deleted */
+}
+.hljs-char.escape_,
+.hljs-link,
+.hljs-params,
+.hljs-property,
+.hljs-punctuation,
+.hljs-tag {
+  /* purposely ignored */
+}

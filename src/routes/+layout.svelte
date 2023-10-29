@@ -2,7 +2,10 @@
     import '../style.css';
     import conf from '../config.toml';
     import { style } from 'svelte-body';
+    import hljs from 'highlight.js';
+    import '../highlight.css';
     import styles from '$lib/theme';
+	import { onMount } from 'svelte';
 
     interface Pages {
         name: string;
@@ -23,10 +26,6 @@
             path: "/howto"
         },
         {
-            name: "楽しみ方",
-            path: "/enjoy"
-        },
-        {
             name: "タイムテーブル",
             path: "/timetable"
         }
@@ -44,6 +43,10 @@
         hamburger.classList.remove("hamburger-open");
         wrapper.classList.remove("hamburger-open");
     };
+
+    onMount(() => {
+        hljs.highlightAll();
+    });
 </script>
 
 <svelte:head>
