@@ -47,6 +47,7 @@
 		"firebase-tools": "^12.5.2",
 		"highlight.js": "^11.9.0",
 		"marked": "^5.1.2",
+		"rehype-raw": "^7.0.0",
 		"svelte-exmarkdown": "^3.0.1",
 		"sveltefire": "^0.2.3"
 	}
