@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         'sans': ['Inter', 'Noto Sans JP', 'sans-serif'],
         'serif': ['Shippori Mincho', 'serif'],
+        'mono': ['JetBrains Mono', 'Noto Sans JP', 'monospace'],
       }
     },
   },

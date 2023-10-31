@@ -1,5 +1,6 @@
 @import url('https://rsms.me/inter/inter.css');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Shippori+Mincho:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Sharp');
 
@@ -218,6 +219,14 @@ footer a:is(:hover, :focus, :active) {
 
 #timetable-content:hover {
     @apply shadow-sm;
+}
+
+#doc {
+    @apply text-left container mx-auto;
+}
+
+#doc h2 {
+    @apply mt-4;
 }
 
 dialog {
