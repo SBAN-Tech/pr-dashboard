@@ -11,10 +11,10 @@
 :root, html, body {
     @apply w-full h-full flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal;
     font-feature-settings: "calt",
-    "case",
-    "ss01",
-    "cv05",
-    "cv07";
+        "case",
+        "ss01",
+        "cv05",
+        "cv07";
 }
 
 * {
@@ -55,6 +55,12 @@ a:is(:hover, :focus, :active) {
 
 i, em {
     @apply italic;
+    font-feature-settings: "calt",
+        "case",
+        "ss01",
+        "cv05",
+        "cv07",
+        "cv11";
 }
 
 strong {
