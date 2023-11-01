@@ -53,6 +53,14 @@ a:is(:hover, :focus, :active) {
     @apply border-neutral-700;
 }
 
+i, em {
+    @apply italic;
+}
+
+strong {
+    @apply font-semibold;
+}
+
 ul, ol {
     @apply list-inside text-left;
 }
