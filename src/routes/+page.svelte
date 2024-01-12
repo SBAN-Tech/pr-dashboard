@@ -1,4 +1,6 @@
 <script lang=ts>
+	import { loadDefaultJapaneseParser as bx } from 'budoux';
+	import Markdown, { allowlist } from 'svelte-exmarkdown';
 	import conf from '../config.toml';
 </script>
 
@@ -14,8 +16,8 @@
             </p>
         </div>
         <div class="sm:col-span-3 flex flex-col">
-            <h2 class="text-center font-serif">{conf.tagline}</h2>
-            <p class="flex-1">{conf.description}</p>
+            <h2 class="text-center font-serif">{bx().parse(conf.tagline).join("\u200B")}</h2>
+            <div class="flex-1"><Markdown md={bx().parse(conf.description).join("\u200B")} plugins={[allowlist(["p", "strong", "em", "del", "a"])]} /></div>
             {#if new Date() > conf.limit}
                 <p class="font-['Reggae_One'] text-xl text-red-600">募集は終了しました</p>
             {/if}

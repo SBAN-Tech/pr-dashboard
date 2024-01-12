@@ -15,8 +15,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.37.1",
-		"@sveltejs/adapter-auto": "^2.1.0",
-		"@sveltejs/adapter-static": "^2.0.3",
+		"@sveltejs/adapter-cloudflare-workers": "^1.2.2",
 		"@sveltejs/kit": "^1.23.0",
 		"@tailwindcss/aspect-ratio": "^0.4.2",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
@@ -42,6 +41,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/marked": "^5.0.1",
+		"budoux": "^0.6.1",
 		"date-fns-tz": "^2.0.0",
 		"firebase": "^9.23.0",
 		"firebase-tools": "^12.5.2",

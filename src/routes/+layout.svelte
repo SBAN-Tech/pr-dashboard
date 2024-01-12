@@ -6,6 +6,7 @@
     import '../highlight.css';
     import styles from '$lib/theme';
 	import { onMount } from 'svelte';
+    import spec from '$lib/spec';
 
     interface Pages {
         name: string;
@@ -45,6 +46,9 @@
     };
 
     onMount(() => {
+        if (!spec) {
+            alert("大変申し訳ありませんが、お使いのブラウザでは一部の機能が正常に動作しない可能性があります。\nブラウザやOSをご更新いただくことをお勧めいたします。\nUser-Agent: " + navigator.userAgent);
+        }
         hljs.highlightAll();
     });
 </script>
