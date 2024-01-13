@@ -9,6 +9,7 @@
     import hljs from 'highlight.js';
     import { loadDefaultJapaneseParser as bx } from 'budoux';
     import Duration from '$lib/duration.svelte';
+    import Datetime from '$lib/datetime.svelte';
     import conf from '../../config.toml';
 
     interface Content {
@@ -51,6 +52,16 @@
     const gettime = (time: Date) => {
         return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()} ${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
     };
+
+    const is_datetime_supported = () => {
+        if (typeof document !== "undefined") {
+            let _e = document.createElement("input");
+            _e.setAttribute("type", "datetime-local");
+            return _e.type === "datetime-local";
+        } else {
+            return true;
+        }
+    }
 
     let vinfo_content: Content = {
         title: "",
@@ -99,11 +110,13 @@
         return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     };
 
+    let datetime: string[];
+
     const contentadd = async () => {
         let send: Send = {
             title: acontent.title,
             auther: acontent.auther,
-            time: Timestamp.fromDate(new Date(zonedTimeToUtc(acontent.time, conf.timezone))),
+            time: Timestamp.fromDate(new Date(zonedTimeToUtc(acontent.time == "" ? `${datetime[0]} ${datetime[1]}:${datetime[2]}:00` : acontent.time, conf.timezone))),
             duration: Number(acontent.duration[0]) * 60 + Number(acontent.duration[1]),
             countdown: acontent.countdown,
             category: acontent.category,
@@ -221,7 +234,11 @@
         <input type="text" bind:value={acontent.id} />
         <h3>公開日時</h3>
         <p>タイムゾーンは<wbr>{format(utcToZonedTime(new Date(), conf.timezone), 'zzz', {timeZone: conf.timezone})}で<wbr>お願いします</p>
-        <input type="datetime-local" bind:value={acontent.time} min={format(utcToZonedTime(conf.start, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} max={format(utcToZonedTime(conf.end, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} />
+        {#if is_datetime_supported()}
+            <input type="datetime-local" bind:value={acontent.time} min={format(utcToZonedTime(conf.start, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} max={format(utcToZonedTime(conf.end, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} />
+        {:else}
+            <Datetime bind:value={datetime} />
+        {/if}
         <h3>動画の長さ</h3>
         <Duration bind:value={acontent.duration} />
         <h3>カウントダウンの長さ</h3>
