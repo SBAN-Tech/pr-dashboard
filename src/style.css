@@ -9,13 +9,24 @@
 @tailwind utilities;
 
 :root, html, body {
-    @apply w-full h-full flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal break-keep;
+    @apply flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal break-keep;
     font-feature-settings: "calt",
         "case",
         "ss01",
         "cv05",
         "cv07";
-   overflow-wrap: anywhere;
+    overflow-wrap: anywhere;
+}
+
+@supports (width: 100dvw) {
+    :root, html, body {
+        @apply w-[100dvw] h-[100dvh];
+    }
+}
+@supports not (width: 100dvw) {
+    :root, html, body {
+        @apply w-full h-full;
+    }
 }
 
 * {
@@ -161,7 +172,7 @@ header {
 }
 
 #hamburger {
-    @apply w-full h-full fixed grid sm:hidden grid-cols-7 gap-0 top-0 left-0 z-50 -ml-[100vw];
+    @apply w-full h-full fixed grid backdrop-blur-[2px] sm:hidden grid-cols-7 gap-0 top-0 left-0 z-50 -ml-[100vw];
 }
 
 #hamburger.hamburger-open {
@@ -246,6 +257,10 @@ footer a:is(:hover, :focus, :active) {
 
 dialog {
     @apply max-w-none max-h-none m-auto w-full h-full sm:w-10/12 sm:h-5/6 sm:rounded p-4 open:flex open:flex-col;
+}
+
+dialog::backdrop, dialog + .backdrop {
+    @apply bg-black/30 backdrop-blur-[2px];
 }
 
 #icon-button {

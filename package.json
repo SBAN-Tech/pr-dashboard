@@ -43,6 +43,7 @@
 		"@types/marked": "^5.0.1",
 		"budoux": "^0.6.1",
 		"date-fns-tz": "^2.0.0",
+		"dialog-polyfill": "^0.5.6",
 		"firebase": "^9.23.0",
 		"firebase-tools": "^12.5.2",
 		"highlight.js": "^11.9.0",

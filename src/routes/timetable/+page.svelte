@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import { Timestamp, collection, addDoc } from 'firebase/firestore';
     import { db } from '$lib/firebase';
     import { collectionStore } from 'sveltefire';
@@ -9,8 +10,6 @@
     import { loadDefaultJapaneseParser as bx } from 'budoux';
     import Duration from '$lib/duration.svelte';
     import conf from '../../config.toml';
-
-    let d: string[];
 
     interface Content {
         title: string;
@@ -28,7 +27,7 @@
         title: string;
         auther: string;
         time: string;
-        duration: string;
+        duration: string[];
         countdown: number;
         category: string;
         description: string;
@@ -69,8 +68,8 @@
         title: "",
         auther: "",
         time: "",
-        duration: "",
-        countdown: 1,
+        duration: ["00", "00"],
+        countdown: 2,
         category: "",
         description: "",
         id: ""
@@ -79,6 +78,14 @@
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
     let sent: HTMLDialogElement;
+    onMount(async () => {
+        if (typeof window !== "undefined") {
+            const dialogPolyfill = (await import('dialog-polyfill')).default;
+            dialogPolyfill.registerDialog(vinfo);
+            dialogPolyfill.registerDialog(addcontent);
+            dialogPolyfill.registerDialog(sent);
+        }
+    });
 
     const openvinfo = (c: Content) => {
         vinfo_content = c;
@@ -97,7 +104,7 @@
             title: acontent.title,
             auther: acontent.auther,
             time: Timestamp.fromDate(new Date(zonedTimeToUtc(acontent.time, conf.timezone))),
-            duration: Number(d[0]) * 3600 + Number(d[1]) * 60 + Number(d[2]),
+            duration: Number(acontent.duration[0]) * 60 + Number(acontent.duration[1]),
             countdown: acontent.countdown,
             category: acontent.category,
             description: acontent.description,
@@ -119,7 +126,7 @@
             title: "",
             auther: "",
             time: "",
-            duration: "",
+            duration: ["00", "00"],
             countdown: 1,
             category: "",
             description: "",
@@ -192,7 +199,7 @@
                         <td>{getduration(vinfo_content.duration)}</td>
                     </tr>
                     <tr>
-                        <th>親の長さ</th>
+                        <th>カウントダウンの長さ</th>
                         <td>{getduration(vinfo_content.countdown * 60)}</td>
                     </tr>
                 </tbody>
@@ -216,9 +223,10 @@
         <p>タイムゾーンは<wbr>{format(utcToZonedTime(new Date(), conf.timezone), 'zzz', {timeZone: conf.timezone})}で<wbr>お願いします</p>
         <input type="datetime-local" bind:value={acontent.time} min={format(utcToZonedTime(conf.start, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} max={format(utcToZonedTime(conf.end, conf.timezone), 'yyyy-MM-dd HH:mm:ss', {timeZone: conf.timezone})} />
         <h3>動画の長さ</h3>
-        <Duration bind:value={d} />
+        <Duration bind:value={acontent.duration} />
         <h3>カウントダウンの長さ</h3>
         <select bind:value={acontent.countdown}>
+            <option value={0}>なし</option>
             <option value={1}>1分</option>
             <option value={2}>2分</option>
             <option value={3}>3分</option>
