@@ -199,7 +199,7 @@
         <Icon icon={CloseOutlined} />
     </button>
     <h2 class="text-center mb-4">{bx().parse(vinfo_content.title).join("\u200B")}</h2>
-    <div class="grid sm:grid-cols-2 gap-4 mt-auto items-center">
+    <div class="grid sm:grid-cols-2 gap-4 items-center h-full">
         <div class="text-center">
             {#if vinfo_content.id == ""}
                 <p>動画がありません。</p>
@@ -209,9 +209,11 @@
             </div>
             {/if}
         </div>
-        <div>
+        <div class="flex flex-col h-full">
             <h3>動画情報</h3>
-            <Markdown md={bx().parse(vinfo_content.description).join("\u200B")} plugins={[gfmPlugin()]} />
+            <div class="flex-1">
+                <Markdown md={bx().parse(vinfo_content.description).join("\u200B")} plugins={[gfmPlugin()]} />
+            </div>
             <table>
                 <tbody>
                     <tr>

@@ -8,7 +8,7 @@
 @tailwind utilities;
 
 :root, html, body {
-    @apply flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal break-keep;
+    @apply flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal break-keep dark:bg-neutral-900 dark:text-white;
     font-feature-settings: "calt",
         "case",
         "ss01",
@@ -57,11 +57,11 @@ h5 {
 }
 
 a {
-    @apply border-b-2 border-neutral-500;
+    @apply border-b-2 border-neutral-500 dark:border-neutral-700;
 }
 
 a:is(:hover, :focus, :active) {
-    @apply border-neutral-700;
+    @apply border-neutral-700 dark:border-neutral-500;
 }
 
 a:has(button) {
@@ -127,23 +127,23 @@ input[type="datetime-local"], input[type="time"] {
 }
 
 button {
-    @apply flex rounded border w-full p-1 text-white items-center justify-center bg-[--primary-500] border-[--primary-500];
+    @apply flex rounded border w-full p-1 text-white items-center justify-center bg-[--primary-500] border-[--primary-500] dark:bg-[--primary-700] dark:border-[--primary-700];
 }
 
-button:is(:hover, :focus, :active) {
-    @apply shadow-md;
+button:not(:disabled):is(:hover, :focus, :active) {
+    @apply shadow opacity-90;
 }
 
 button#white-button {
-    @apply border-neutral-500 bg-white text-neutral-800;
+    @apply border-neutral-500 bg-transparent text-neutral-800 dark:border-neutral-400 dark:text-white;
 }
 
-button#white-button:is(:hover, :focus, :active) {
-    @apply text-[--primary-600] border-[--primary-500];
+button#white-button:not(:disabled):is(:hover, :focus, :active) {
+    @apply text-[--primary-600] border-[--primary-500] dark:text-[--primary-300] dark:border-[--primary-400] opacity-100;
 }
 
 button:disabled {
-    @apply border-neutral-400 bg-neutral-400 text-white shadow-none;
+    @apply border-neutral-400 bg-neutral-400 dark:border-neutral-800 dark:bg-neutral-800 text-white dark:text-neutral-500 shadow-none;
 }
 
 input:not([type="button"]):not([type="radio"]):not([type="checkbox"]):is(:hover, :focus, :active),
@@ -151,7 +151,7 @@ select:is(:hover, :focus, :active),
 textarea:is(:hover, :focus, :focus-visible, :active),
 #duration:is(:hover, :focus, :active),
 #duration:has(input:is(:hover, :focus, :active)) {
-    @apply border-[--primary-500] outline-none;
+    @apply border-[--primary-500] dark:border-[--primary-300] outline-none;
 }
 
 #duration input {
@@ -159,19 +159,15 @@ textarea:is(:hover, :focus, :focus-visible, :active),
 }
 
 table {
-    @apply border-separate border-spacing-x-2 border-spacing-y-4 -ml-2;
-}
-
-th, td {
-    @apply py-2;
+    @apply border-separate border-spacing-2 -ml-2;
 }
 
 th {
-    @apply font-normal text-white bg-[--primary-600];
+    @apply text-[--primary-600] dark:text-[--primary-300] text-left;
 }
 
 header {
-    @apply flex items-center gap-2 w-full text-white px-4 py-3 z-30 fixed text-xl bg-[--primary-500];
+    @apply flex items-center gap-2 w-full px-4 py-3 z-30 fixed text-xl bg-white/75 dark:bg-neutral-900/75 backdrop-blur border-b border-neutral-100 dark:border-neutral-800 shadow shadow-black/[2.5%];
 }
 
 #hamburger {
@@ -183,7 +179,7 @@ header {
 }
 
 #menu {
-    @apply flex flex-col p-4 col-span-5 bg-white;
+    @apply flex flex-col p-4 col-span-5 bg-white/80 dark:bg-neutral-900/80 backdrop-blur border-r border-neutral-200 dark:border-neutral-800;
 }
 
 :is(header, #menu) ul {
@@ -191,11 +187,19 @@ header {
 }
 
 #hamburger-item {
-    @apply pl-6 pr-4 py-3 hover:bg-neutral-100 focus:bg-neutral-100 active:bg-neutral-100;
+    @apply pl-6 pr-4 py-3;
 }
 
-:is(header ,#menu) a {
+#hamburger-item:is(:hover, :focus, :active) {
+    @apply bg-black/5 dark:bg-white/5;
+}
+
+:is(header, #menu) a {
     @apply border-none;
+}
+
+:is(header, #menu) a:is(:hover, :focus, :active) {
+    @apply sm:text-[--primary-500] dark:sm:text-[--primary-300];
 }
 
 #wrapper {
@@ -211,11 +215,11 @@ header {
 }
 
 #top-board {
-    @apply w-full p-4 bg-[--primary-100];
+    @apply w-full -mt-[3.25rem] pt-[4.25rem] pb-8 bg-[--primary-50] dark:bg-transparent;
 }
 
 #top-board-content {
-    @apply w-9/12 grid sm:grid-cols-5 gap-4 mx-auto;
+    @apply w-10/12 sm:w-9/12 grid sm:grid-cols-5 gap-4 mx-auto;
 }
 
 div, main {
@@ -227,15 +231,15 @@ main {
 }
 
 footer {
-    @apply w-full text-neutral-600 text-xs p-4 mt-auto text-center bg-[--primary-100];
+    @apply w-full text-neutral-600 dark:bg-transparent dark:text-neutral-200 text-xs px-4 py-6 mt-auto text-center bg-[--primary-50];
 }
 
 footer a {
-    @apply border-b-2 border-neutral-400;
+    @apply border-b-2 border-neutral-400 dark:border-neutral-700;
 }
 
 footer a:is(:hover, :focus, :active) {
-    @apply border-neutral-500;
+    @apply border-neutral-500 dark:border-neutral-500;
 }
 
 #timetable {
@@ -243,7 +247,7 @@ footer a:is(:hover, :focus, :active) {
 }
 
 #timetable-content {
-    @apply border rounded border-neutral-200 p-4;
+    @apply border rounded border-neutral-200 dark:border-neutral-600 p-4;
 }
 
 #timetable-content:hover {
@@ -259,7 +263,7 @@ footer a:is(:hover, :focus, :active) {
 }
 
 dialog {
-    @apply max-w-none max-h-none m-auto w-full h-full sm:w-10/12 sm:h-5/6 sm:rounded p-4 open:flex open:flex-col;
+    @apply bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-white max-w-none max-h-none m-auto w-full h-full sm:w-10/12 sm:h-5/6 sm:rounded p-4 open:flex open:flex-col;
 }
 
 dialog::backdrop, dialog + .backdrop {
@@ -267,9 +271,9 @@ dialog::backdrop, dialog + .backdrop {
 }
 
 #icon-button {
-    @apply border-none bg-transparent hover:shadow-none focus:shadow-none active:shadow-none w-auto min-h-0 p-0;
+    @apply text-[currentColor] border-none bg-transparent hover:shadow-none focus:shadow-none active:shadow-none w-auto min-h-0 p-0;
 }
 
 #dialog-close {
-    @apply border-none bg-transparent text-neutral-800 hover:shadow-none focus:shadow-none active:shadow-none w-auto p-3 -mt-4 -ml-4 mr-auto text-lg fixed;
+    @apply border-none bg-transparent text-[currentColor] hover:shadow-none focus:shadow-none active:shadow-none w-auto p-3 -mt-4 -ml-4 mr-auto text-lg fixed;
 }

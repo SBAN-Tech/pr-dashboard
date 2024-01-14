@@ -1,3 +1,4 @@
+import colors from 'tailwindcss/colors';
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
@@ -7,7 +8,7 @@ export default {
         'sans': ['Inter', 'Noto Sans JP', 'sans-serif'],
         'serif': ['Shippori Mincho', 'serif'],
         'mono': ['JetBrains Mono', 'Noto Sans JP', 'monospace'],
-      }
+      },
     },
   },
   plugins: [
