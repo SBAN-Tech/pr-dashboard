@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Shippori+Mincho:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Sharp');
 
 @tailwind base;
 @tailwind components;
@@ -272,11 +271,5 @@ dialog::backdrop, dialog + .backdrop {
 }
 
 #dialog-close {
-    @apply border-none bg-transparent text-neutral-800 hover:shadow-none focus:shadow-none active:shadow-none w-auto p-2 -mt-4 -ml-4 mr-auto text-2xl fixed;
-}
-
-.material-icons-sharp {
-    font-size: inherit;
-    line-height: inherit;
-    @apply inline-flex items-center;
+    @apply border-none bg-transparent text-neutral-800 hover:shadow-none focus:shadow-none active:shadow-none w-auto p-3 -mt-4 -ml-4 mr-auto text-lg fixed;
 }

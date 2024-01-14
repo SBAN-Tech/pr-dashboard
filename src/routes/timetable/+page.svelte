@@ -8,8 +8,10 @@
     import { gfmPlugin } from 'svelte-exmarkdown/gfm';
     import hljs from 'highlight.js';
     import { loadDefaultJapaneseParser as bx } from 'budoux';
+    import { CloseOutlined, FolderFilled } from '@ant-design/icons-svg';
     import Duration from '$lib/duration.svelte';
     import Datetime from '$lib/datetime.svelte';
+    import Icon from '$lib/icon.svelte';
     import conf from '../../config.toml';
 
     interface Content {
@@ -172,7 +174,7 @@
         {#each $contents.sort((a, b) => {return (a.time.toDate() < b.time.toDate()) ? -1: 1;}) as content}
             <div id="timetable-content">
                 <p class="text-sm">{gettime(content.time.toDate())}</p>
-                <p class="text-xs flex justify-center"><span class="material-icons-sharp">folder</span>{content.category}</p>
+                <p class="text-xs flex justify-center items-center gap-[0.125rem]"><Icon icon={FolderFilled} />{content.category}</p>
                 <h2>{bx().parse(content.title).join("\u200B")}<span class="text-sm font-normal ml-2">({getduration(content.duration + content.countdown * 60)})</span></h2>
                 <p>{bx().parse(content.auther).join("\u200B")}</p>
                 {#if content.approved}
@@ -194,7 +196,7 @@
 
 <dialog bind:this={vinfo}>
     <button title="閉じる" id="dialog-close" on:click={() => vinfo.close()}>
-        <span class="material-icons-sharp">close</span>
+        <Icon icon={CloseOutlined} />
     </button>
     <h2 class="text-center mb-4">{bx().parse(vinfo_content.title).join("\u200B")}</h2>
     <div class="grid sm:grid-cols-2 gap-4 mt-auto items-center">
@@ -236,7 +238,7 @@
 
 <dialog bind:this={addcontent} class="text-left">
     <button title="閉じる" id="dialog-close" on:click={() => addcontent.close()}>
-        <span class="material-icons-sharp">close</span>
+        <Icon icon={CloseOutlined} />
     </button>
     <div class="w-10/12 mx-auto">
         <h3>タイトル</h3>
