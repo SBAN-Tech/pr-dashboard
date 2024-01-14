@@ -128,6 +128,19 @@
         try {
             const res = await addDoc(collection(db, "contents"), send);
             console.log("Wrote: contents/" + res.id);
+            if (conf.discord) {
+                await fetch(conf.discord, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        "username": "タイムテーブル登録通知",
+                        "content": `#${conf.hashtag}\n${format(send.time.toDate(), "M/d H:mm", { timeZone: conf.timezone })}より、${send.auther}さんによる「${send.title}」のプレミアが始まります!\nhttps://youtu.be/${send.id}${conf.list ? `?list=${conf.list}` : ""}`,
+                    }),
+                });
+            }
         } catch(e) {
             console.error("Error: " + e);
         }

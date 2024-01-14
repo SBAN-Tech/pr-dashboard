@@ -65,6 +65,10 @@ a:is(:hover, :focus, :active) {
     @apply border-neutral-700;
 }
 
+a:has(button) {
+    @apply border-none;
+}
+
 i, em {
     @apply italic;
     font-feature-settings: "calt",
