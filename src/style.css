@@ -171,7 +171,7 @@ header {
 }
 
 #hamburger {
-    @apply w-full h-full fixed grid backdrop-blur-[2px] sm:hidden grid-cols-7 gap-0 top-0 left-0 z-50 -ml-[100vw];
+    @apply w-full h-full fixed grid backdrop-blur sm:hidden grid-cols-7 gap-0 top-0 left-0 z-50 -ml-[100vw];
 }
 
 #hamburger.hamburger-open {
@@ -179,7 +179,7 @@ header {
 }
 
 #menu {
-    @apply flex flex-col p-4 col-span-5 bg-white/80 dark:bg-neutral-900/80 backdrop-blur border-r border-neutral-200 dark:border-neutral-800;
+    @apply flex flex-col p-4 col-span-5 bg-white/90 dark:bg-neutral-900/90 border-r border-neutral-200 dark:border-neutral-800;
 }
 
 :is(header, #menu) ul {
@@ -267,7 +267,7 @@ dialog {
 }
 
 dialog::backdrop, dialog + .backdrop {
-    @apply bg-black/30 backdrop-blur-[2px];
+    @apply bg-black/30 backdrop-blur-sm;
 }
 
 #icon-button {
