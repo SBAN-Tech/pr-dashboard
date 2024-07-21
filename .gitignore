@@ -8,4 +8,7 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-pnpm-lock.yaml
+/.wrangler
+.dev.vars
+/.cloudflare
+wrangler.toml

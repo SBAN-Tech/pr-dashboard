@@ -7,14 +7,16 @@ interface Config {
     favicon: string;
     logo: string;
     logo_polyfill?: string;
-    copyrights: string[];
-    categories: string[];
+    copyrights: Array<string>;
     theme: string;
     start: Date;
     limit: Date;
     end: Date;
     timezone: string;
-    discord?: string;
+    category: {
+        list: Array<string>;
+        event?: string;
+    };
 }
 
 declare module '*.toml' {

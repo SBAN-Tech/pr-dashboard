@@ -1,8 +1,3 @@
-@import url('https://rsms.me/inter/inter.css');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Shippori+Mincho:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -34,6 +29,14 @@
 
 h1, h2, h3, h4, h5, h6 {
     @apply font-semibold;
+}
+
+:is(h1, h2, h3):not(:first-child) {
+    @apply mt-4;
+}
+
+h4:not(:first-child) {
+    @apply mt-2;
 }
 
 h1 {
@@ -95,7 +98,7 @@ ol {
 }
 
 pre, code, samp, kbd {
-    @apply font-mono;
+    @apply !font-mono;
 }
 
 pre {
@@ -131,14 +134,14 @@ button {
 }
 
 button:not(:disabled):is(:hover, :focus, :active) {
-    @apply shadow opacity-90;
+    @apply opacity-90;
 }
 
-button#white-button {
+button.pr_white_button {
     @apply border-neutral-500 bg-transparent text-neutral-800 dark:border-neutral-400 dark:text-white;
 }
 
-button#white-button:not(:disabled):is(:hover, :focus, :active) {
+button.pr_white_button:not(:disabled):is(:hover, :focus, :active) {
     @apply text-[--primary-600] border-[--primary-500] dark:text-[--primary-300] dark:border-[--primary-400] opacity-100;
 }
 
@@ -167,7 +170,7 @@ th {
 }
 
 header {
-    @apply flex items-center gap-2 w-full px-4 py-3 z-30 fixed text-xl bg-white/75 dark:bg-neutral-900/75 backdrop-blur border-b border-neutral-100 dark:border-neutral-800 shadow shadow-black/[2.5%];
+    @apply flex items-center gap-2 w-full px-4 py-3 z-30 fixed text-xl bg-white/75 dark:bg-neutral-900/75 backdrop-blur border-b border-neutral-100 dark:border-neutral-800;
 }
 
 #hamburger {
@@ -227,7 +230,7 @@ div, main {
 }
 
 main {
-    @apply w-10/12 pt-4 mx-auto text-center;
+    @apply w-10/12 pt-4 mx-auto;
 }
 
 footer {
@@ -242,23 +245,15 @@ footer a:is(:hover, :focus, :active) {
     @apply border-neutral-500 dark:border-neutral-500;
 }
 
-#timetable {
-    @apply flex flex-col gap-4 mt-4;
+.pr_timetable_content {
+    @apply w-full flex flex-row items-stretch gap-4 border-t border-neutral-200 dark:border-neutral-600 p-2;
 }
 
-#timetable-content {
-    @apply border rounded border-neutral-200 dark:border-neutral-600 p-4;
-}
-
-#timetable-content:hover {
-    @apply shadow-sm;
-}
-
-#doc {
+.doc {
     @apply text-left container mx-auto;
 }
 
-#doc h2 {
+.doc h2 {
     @apply mt-4;
 }
 
@@ -270,10 +265,18 @@ dialog::backdrop, dialog + .backdrop {
     @apply bg-black/30 backdrop-blur-sm;
 }
 
-#icon-button {
-    @apply text-[currentColor] border-none bg-transparent hover:shadow-none focus:shadow-none active:shadow-none w-auto min-h-0 p-0;
+.pr_icon_button {
+    @apply text-[currentColor] border-none bg-transparent w-auto min-h-0 p-0;
 }
 
-#dialog-close {
-    @apply border-none bg-transparent text-[currentColor] hover:shadow-none focus:shadow-none active:shadow-none w-auto p-3 -mt-4 -ml-4 mr-auto text-lg fixed;
+.pr_icon_button:not(:disabled):is(:hover, :focus, :active) {
+    @apply shadow-none text-[--primary-600] dark:text-[--primary-400];
+}
+
+.pr_icon_button:disabled {
+    @apply text-[currentColor] opacity-50 bg-transparent;
+}
+
+.pr_dialog_close {
+    @apply border-none bg-transparent text-[currentColor] hover:shadow-none focus:shadow-none active:shadow-none w-auto p-3 -mt-4 -ml-4 mr-auto text-xl fixed;
 }

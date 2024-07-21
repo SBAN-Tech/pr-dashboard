@@ -1,11 +1,11 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { ViteToml } from 'vite-plugin-toml';
 import { defineConfig } from 'vitest/config';
-import { ViteToml } from 'vite-plugin-toml'
 
 export default defineConfig({
 	plugins: [
 		sveltekit(),
-	    ViteToml()
+		ViteToml()
 	],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']

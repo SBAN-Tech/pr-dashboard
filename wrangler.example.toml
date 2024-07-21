@@ -1,0 +1,24 @@
+name = "pr-dashboard-test"
+main = "./.cloudflare/worker.js"
+compatibility_date = "2024-07-20"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[site]
+bucket = "./.cloudflare/public"
+
+[build]
+command = "bunx vite build"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "" #Database Name
+database_id = "" #Database ID
+preview_database_id = "DB"
+
+[vars]
+AUTH_SECRET = "" #openssl rand -base64 32
+AUTH_DISCORD_ID = "" #Discord OAuth2 Client ID
+AUTH_DISCORD_SECRET = "" #Discord OAuth2 Client Secret
+AUTH_DISCORD_USERS = [] #ID of Users allowed
+DISCORD_WEBHOOK_URL = "" #Discord Webhook URL

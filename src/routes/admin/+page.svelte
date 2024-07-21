@@ -1,0 +1,321 @@
+<script lang="ts">
+    import conf from '~/src/config.toml';
+    import Editor from "$lib/editor.svelte";
+    import type { PageData, ActionData } from "./$types";
+    import { page } from "$app/stores";
+    import { enhance, applyAction } from '$app/forms';
+	import { onMount } from "svelte";
+    import { compareAsc } from "date-fns";
+    import { format as date_tz_format, fromZonedTime } from "date-fns-tz";
+    import Icon from "@iconify/svelte";
+    import { loadDefaultJapaneseParser as bx } from 'budoux';
+	import { goto } from '$app/navigation';
+	import type { ActionResult } from '@sveltejs/kit';
+    export let data: PageData;
+    export let form: ActionData;
+
+    let editdialog: HTMLDialogElement;
+    let updating: HTMLDialogElement;
+    let updated: HTMLDialogElement;
+    let removed: HTMLDialogElement;
+    let searchdialog: HTMLDialogElement;
+
+    let ok = false;
+
+    const content_table_init: ContentDBTable = {
+        id: null,
+        title: "",
+        auther: "",
+        category: "",
+        description: "",
+        time: conf.start.toISOString(),
+        duration: 0,
+        countdown: 2,
+        approved: false
+    };
+
+    let contents: Array<Content> = [];
+    const content_devide_by_date = (cs_p: Array<Content>) => {
+        let cs = cs_p.sort((a, b) => compareAsc(a.time, b.time));
+        let result: Array<ContentDividedbyDate> = [];
+        for (let i = 0; i < cs.length; i++) {
+            if (i == 0) {
+                result.push({
+                    date: date_tz_format(cs[i].time, "yyyy/MM/dd", {timeZone: conf.timezone}),
+                    contents: [cs[i]]
+                });
+            } else if (date_tz_format(cs[i].time, "yyyyMMdd", {timeZone: conf.timezone}) != date_tz_format(cs[i-1].time, "yyyyMMdd", {timeZone: conf.timezone})) {
+                result.push({
+                    date: date_tz_format(cs[i].time, "yyyy/MM/dd", {timeZone: conf.timezone}),
+                    contents: [cs[i]]
+                });
+            } else {
+                result[result.length - 1].contents.push(cs[i]);
+            }
+        }
+        return result;
+    };
+    let content_devided_by_date = content_devide_by_date(contents);
+    const updatecontent = async () => {
+        contents = (await data.contents);
+        content_devided_by_date = content_devide_by_date(contents);
+        if (searching) {
+            search();
+        }
+        if (filteringnotapproved) {
+            filternotapproved();
+        }
+    };
+
+    let searching = false;
+    let wfilteringnotapproved = false;
+    let filteringnotapproved = false;
+    let slabel = "none";
+    let sparam = "";
+    let scontents = contents;
+    const search = () => {
+        switch (slabel) {
+            case "title":
+                searching = true;
+                scontents = contents.filter((c) => c.title.includes(sparam));
+                break;
+            case "auther":
+                searching = true;
+                scontents = contents.filter((c) => c.auther.includes(sparam));
+                break;
+            case "id":
+                searching = true;
+                scontents = contents.filter((c) => c.id?.includes(sparam));
+                break;
+            default:
+                searching = false;
+                scontents = contents;
+                break;
+        }
+    }
+
+    const filternotapproved = () => {
+        scontents = filteringnotapproved ? scontents.filter((c) => !c.approved) : scontents;
+    }
+
+    let editing = content_table_init;
+    let editing_key = "";
+    const edit = (econtent: Content) => {
+        editing_key = econtent.key;
+        editing = {
+            id: econtent.id,
+            title: econtent.title,
+            auther: econtent.auther,
+            category: econtent.category,
+            description: econtent.description,
+            time: econtent.time.toISOString(),
+            duration: econtent.duration,
+            countdown: econtent.countdown,
+            approved: econtent.approved
+        };
+        editdialog.showModal();
+    };
+    const update = async (result: ActionResult<Record<string, unknown> | undefined, Record<string, unknown> | undefined>) => {
+        updating.showModal();
+        editing = content_table_init;
+        await applyAction(result);
+        contents = form?.contents ? form?.contents : contents;
+        content_devided_by_date = content_devide_by_date(contents);
+        if (searching) {
+            search();
+        }
+        if (filteringnotapproved) {
+            filternotapproved();
+        }
+        updating.close();
+        updated.showModal();
+    };
+    const remove = () => {
+        updating.showModal();
+        editing = content_table_init;
+        contents = form?.contents ? form?.contents : contents;
+        content_devided_by_date = content_devide_by_date(contents);
+        if (searching) {
+            search();
+        }
+        if (filteringnotapproved) {
+            filternotapproved();
+        }
+        updatecontent();
+        updating.close();
+        removed.showModal();
+    }
+
+    const duration = (_d: number, _c: number) => `${_d / 60 + _c}:${((_d % 60) + "").padStart(2, "0")}`;
+
+    onMount(async () => {
+        const dialogPolyfill = (await import('dialog-polyfill')).default;
+        ok = await (await fetch(`${import.meta.env.BASE_URL}api/discord/isloginable`)).json() as boolean;
+        updatecontent();
+        dialogPolyfill.registerDialog(editdialog);
+        dialogPolyfill.registerDialog(updating);
+        dialogPolyfill.registerDialog(updated);
+        dialogPolyfill.registerDialog(removed);
+        dialogPolyfill.registerDialog(searchdialog);
+    });
+</script>
+
+<svelte:head>
+    <title>ダッシュボード | {conf.title}</title>
+</svelte:head>
+
+<main class="h-[calc(100vh_-_3.25rem)] gap-0 pb-0 -mb-4">
+    {#if $page.data.session?.user}
+        {#if ok}
+            <div class="overflow-y-scroll flex-1">
+                {#if content_devided_by_date.length == 0}
+                    <p>ないらしい</p>
+                {/if}
+                {#each content_devided_by_date as _date, j}
+                    <div id={`timetable_${_date.date.replaceAll("/", "")}`} class="pt-[3.25rem] -mt-[3.25rem] pointer-events-none border-b border-neutral-200 dark:border-neutral-600">
+                        <nav class="sticky w-full top-0 flex py-1 pointer-events-auto bg-white/75 dark:bg-neutral-900/75 backdrop-blur z-10">
+                            <h4 class="flex-1">{_date.date}</h4>
+                            <div class="flex flex-row items-center text-xl">
+                                {#if j == 0}
+                                    <button class="pr_icon_button" disabled>
+                                        <Icon icon="heroicons:chevron-up-solid" />
+                                    </button>
+                                {:else}
+                                    <a href={`#timetable_${content_devided_by_date[j-1].date.replaceAll("/", "")}`}>
+                                        <button class="pr_icon_button" title="前の日">
+                                            <Icon icon="heroicons:chevron-up-solid" />
+                                        </button>
+                                    </a>
+                                {/if}
+                                {#if j == content_devided_by_date.length - 1}
+                                    <button class="pr_icon_button" disabled>
+                                        <Icon icon="heroicons:chevron-down-solid" />
+                                    </button>
+                                {:else}
+                                    <a href={`#timetable_${content_devided_by_date[j+1].date.replaceAll("/", "")}`}>
+                                        <button class="pr_icon_button" title="次の日">
+                                            <Icon icon="heroicons:chevron-down-solid" />
+                                        </button>
+                                    </a>
+                                {/if}
+                            </div>
+                        </nav>
+                        {#each _date.contents as content}
+                            <div class="pr_timetable_content pointer-events-auto">
+                                <div class="flex flex-col gap-1 z-0" style={`opacity: ${content.approved ? 1 : 0.5};`}>
+                                    <p>{date_tz_format(content.time, "HH:mm", {timeZone: conf.timezone})}</p>
+                                    <p class="text-xs text-right">({duration(content.duration, content.countdown)})</p>
+                                </div>
+                                <div class="flex flex-col gap-1 flex-1">
+                                    <p>{bx().parse(content.title).join("\u200B")}</p>
+                                    <p class="text-xs flex flex-row flex-wrap gap-2">
+                                        <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:user-16-solid" />{content.auther}</span>
+                                        <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:folder-20-solid" />{content.category}</span>
+                                    </p>
+                                </div>
+                                <div class="flex flex-row gap-1 ml-auto items-center text-xl">
+                                    <button title="編集" class="pr_icon_button" on:click={() => edit(content)}>
+                                        <Icon icon="heroicons:pencil-solid" />
+                                    </button>
+                                </div>
+                            </div>
+                        {/each}
+                    </div>
+                {/each}
+            </div>
+            <button title="検索" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4" on:click={() => searchdialog.showModal()}>
+                <Icon icon="heroicons:magnifying-glass-solid" />
+            </button>
+        {:else}
+            <p>許可なし</p>
+        {/if}
+    {:else}
+        <p>未ログイン</p>
+    {/if}
+</main>
+
+<dialog bind:this={editdialog} class="text-left">
+    <button title="閉じる" class="pr_dialog_close" on:click={() => editdialog.close()}>
+        <Icon icon="heroicons:x-mark-solid" />
+    </button>
+    <div class="w-10/12 mx-auto">
+        <form method="post" action="?/update" use:enhance={() => {
+            return async ({ result }) => {
+                if (result.type === 'redirect') {
+                    goto(result.location);
+                } else {
+                    await update(result);
+                }
+            };
+        }}>
+            <Editor bind:content={editing} />
+            <input type="hidden" name="key" value={editing_key} />
+            <input type="hidden" name="id" value={editing.id} />
+            <input type="hidden" name="title" value={editing.title} />
+            <input type="hidden" name="auther" value={editing.auther} />
+            <input type="hidden" name="category" value={editing.category} />
+            <input type="hidden" name="description" value={editing.description} />
+            <input type="hidden" name="time" value={date_tz_format(fromZonedTime(editing.time, conf.timezone), "yyyy-MM-dd'T'HH:mm:ssXXXXX", {timeZone: conf.timezone})} />
+            <input type="hidden" name="duration" value={editing.duration} />
+            <input type="hidden" name="countdown" value={editing.countdown} />
+            <input type="hidden" name="approved" value={editing.approved ? "true" : "false"} />
+            <label>
+                <input type="checkbox" bind:checked={editing.approved} />
+                承認する
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                <button type="submit" class="order-2">変更</button>
+                <button formaction="?/remove" class="order-3 sm:order-1 pr_white_button" on:click={remove}>削除</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<dialog bind:this={updating} class="h-fit sm:w-1/2 w-10/12 text-left">
+    <div class="flex flex-col gap-2">
+        <h2 class="text-center">送信中...</h2>
+    </div>
+</dialog>
+
+<dialog bind:this={updated} class="h-fit sm:w-1/2 w-10/12 text-left">
+    <div class="flex flex-col gap-2">
+        <h2 class="text-center">更新完了</h2>
+        <p>更新が完了しました。</p>
+        <button on:click={() => {updated.close();editdialog.close()}}>閉じる</button>
+    </div>
+</dialog>
+
+<dialog bind:this={removed} class="h-fit sm:w-1/2 w-10/12 text-left">
+    <div class="flex flex-col gap-2">
+        <h2 class="text-center">削除完了</h2>
+        <p>削除が完了しました。</p>
+        <button on:click={() => {removed.close();editdialog.close()}}>閉じる</button>
+    </div>
+</dialog>
+
+<dialog bind:this={searchdialog} class="sm:h-fit sm:w-fit w-full h-full text-left">
+    <button title="閉じる" class="pr_dialog_close" on:click={() => searchdialog.close()}>
+        <Icon icon="heroicons:x-mark-solid" />
+    </button>
+    <div class="py-4 sm:px-6 w-10/12 sm:w-fit mx-auto">
+        <p class="flex sm:flex-row flex-col gap-1">
+            <select bind:value={slabel} class="sm:w-fit w-full">
+                <option value="none">なし</option>
+                <option value="title">タイトル</option>
+                <option value="auther">投稿者</option>
+                <option value="id">動画ID</option>
+            </select>
+            <input type="text" bind:value={sparam} placeholder="検索語句" />
+        </p>
+        <label class="flex flex-row gap-1">
+            <input type="checkbox" bind:checked={wfilteringnotapproved} />
+            <span>非承認のみ表示</span>
+        </label>
+        <button on:click={() => {
+            search();
+            filteringnotapproved = wfilteringnotapproved;
+            filternotapproved();
+            content_devided_by_date = content_devide_by_date(scontents);
+        }}>検索</button>
+    </div>
+</dialog>

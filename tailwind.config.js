@@ -1,18 +1,15 @@
-import colors from 'tailwindcss/colors';
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+  content: ["./src/**/*.{html,js,svelte,svx,ts}"],
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Inter', 'Noto Sans JP', 'sans-serif'],
-        'serif': ['Shippori Mincho', 'serif'],
-        'mono': ['JetBrains Mono', 'Noto Sans JP', 'monospace'],
+        'sans': ["'InterVariable'", "'Noto Sans JP Variable'", 'sans-serif'],
+        'serif': ["'Shippori Mincho'", 'serif'],
+        'mono': ["'JetBrains Mono Variable'", "'Noto Sans JP Variable'", 'monospace'],
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [],
 }
 

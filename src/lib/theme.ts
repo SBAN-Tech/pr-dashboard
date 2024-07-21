@@ -1,4 +1,4 @@
-import conf from '../config.toml';
+import conf from '~/src/config.toml';
 import colors from 'tailwindcss/colors';
 let themelist = ["slate", "gray", "zinc", "neutral", "stone", "red", "orange", "amber", "yellow", "lime", "green", "emerald", "teal", "cyan", "sky", "blue", "indigo", "violet", "purple", "fuchsia", "pink", "rose"]
 let theme = themelist.includes(conf.theme) ? conf.theme : "teal";
@@ -84,6 +84,7 @@ let styles = `--primary-50: ${primary[0]};
 --primary-700: ${primary[7]};
 --primary-800: ${primary[8]};
 --primary-900: ${primary[9]};
---primary-950: ${primary[10]};`;
+--primary-950: ${primary[10]};
+`;
 
 export default styles;

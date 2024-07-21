@@ -1,0 +1,16 @@
+<script lang="ts">
+    import conf from '~/src/config.toml';
+    import PageHeader from '$lib/page-header.svelte';
+</script>
+
+<svelte:head>
+    <title>参加方法 | {conf.title}</title>
+</svelte:head>
+
+<PageHeader title="参加方法" />
+
+<main>
+
+
+
+</main>

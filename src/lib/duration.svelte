@@ -1,16 +1,18 @@
 <script lang="ts">
     let first: HTMLInputElement;    
 
-    export let value = ["00", "00"];
+    let v = ["00", "00"];
+    export let value = 0;
 
     const oninput = (i: number) => {
-        value[i] = `00${value[i]}`.replaceAll(/[^0-9]/g, '').slice(-2);
+        v[i] = `00${v[i]}`.replaceAll(/[^0-9]/g, '').slice(-2);
+        value = parseInt(v[0]) * 60 + parseInt(v[1]);
     }
 </script>
 
 <label class="flex flex-row gap-[0.15rem]" id="duration" on:click={() => first.click()}>
-    <input type="text" pattern="[0-9][0-9]" class="ml-1" bind:this={first} bind:value={value[0]} on:input={() => oninput(0)} />
+    <input type="text" pattern="[0-9][0-9]" class="ml-1" bind:this={first} bind:value={v[0]} on:input={() => oninput(0)} />
     m
-    <input type="text" pattern="[0-9][0-9]" bind:value={value[1]} on:input={() => oninput(1)} />
+    <input type="text" pattern="[0-9][0-9]" bind:value={v[1]} on:input={() => oninput(1)} />
     s
 </label>
