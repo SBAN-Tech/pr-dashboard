@@ -45,6 +45,7 @@ export const actions: Actions = {
             return fail(400);
         }
         return {
+            success: true,
             contents: await db.remove(platform?.env?.DB, key)
         };
     }

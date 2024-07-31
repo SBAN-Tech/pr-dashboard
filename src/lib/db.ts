@@ -3,6 +3,7 @@ import type { D1Database } from "@cloudflare/workers-types";
 import { drizzle } from "drizzle-orm/d1";
 import { eq } from "drizzle-orm";
 import { parseISO } from "date-fns";
+import { ulid } from "ulidx";
 
 const get = async (db: D1Database | undefined) => {
     if (!db) {
@@ -24,14 +25,13 @@ const get = async (db: D1Database | undefined) => {
 };
 
 const insert = async (db: D1Database | undefined, table: ContentDBTable) => {
-    const { ulid } = await import(`ulid`);
     if (!db) {
         throw Error("Cannot find database.");
     }
     const d1database = drizzle(db);
     let key = ulid();
-    await d1database.insert(contents).values(Object.assign({key}, table));
-    return get(db);
+    await d1database.insert(contents).values(Object.assign({key}, table)).execute();
+    return await get(db);
 }
 
 const update = async (db: D1Database | undefined, key: string, patch: Partial<ContentDBTable>) => {
@@ -39,7 +39,7 @@ const update = async (db: D1Database | undefined, key: string, patch: Partial<Co
         throw Error("Cannot find database.");
     }
     const d1database = drizzle(db);
-    await d1database.update(contents).set(patch).where(eq(contents.key, key));
+    await d1database.update(contents).set(patch).where(eq(contents.key, key)).execute();
     return await get(db);
 }
 
@@ -48,7 +48,7 @@ const remove = async (db: D1Database | undefined, key: string) => {
         throw Error("Cannot find database.");
     }
     const d1database = drizzle(db);
-    await d1database.delete(contents).where(eq(contents.key, key));
+    await d1database.delete(contents).where(eq(contents.key, key)).execute();
     return await get(db);
 }
 

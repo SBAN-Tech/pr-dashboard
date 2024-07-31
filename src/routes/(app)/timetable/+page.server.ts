@@ -30,7 +30,6 @@ export const actions: Actions = {
         if (platform?.env.DISCORD_WEBHOOK_URL) {
             await fetch(platform?.env.DISCORD_WEBHOOK_URL, {
                 method: "POST",
-                mode: "cors",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -40,6 +39,7 @@ export const actions: Actions = {
             });
         }
         return {
+            success: true,
             contents: await db.insert(platform?.env?.DB, content)
         };
     }
