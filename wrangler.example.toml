@@ -1,6 +1,6 @@
 name = "pr-dashboard-test"
 main = "./.cloudflare/worker.js"
-compatibility_date = "2024-07-20"
+compatibility_date = "2024-07-31"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 

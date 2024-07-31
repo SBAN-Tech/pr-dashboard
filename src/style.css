@@ -4,11 +4,6 @@
 
 :root, html, body {
     @apply flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal break-keep dark:bg-neutral-900 dark:text-white;
-    font-feature-settings: "calt",
-        "case",
-        "ss01",
-        "cv05",
-        "cv07";
     overflow-wrap: anywhere;
 }
 

@@ -100,7 +100,6 @@
     let acontent = content_table_init;
 
     const send = async (result: ActionResult<Record<string, unknown> | undefined, Record<string, unknown> | undefined>) => {
-        sending.showModal();
         await applyAction(result);
         acontent = content_table_init;
         contents = form?.contents ? form?.contents : contents;
@@ -118,6 +117,9 @@
 
 <main>
     <div class="m-0 flex flex-col w-full">
+        {#if content_devided_by_date.length <= 0}
+            <p>ないらしい</p>
+        {/if}
         {#each content_devided_by_date as _date, j}
             <div id={`timetable_${_date.date.replaceAll("/", "")}`} class="pt-[3.25rem] -mt-[3.25rem] pointer-events-none border-b border-neutral-200 dark:border-neutral-600">
                 <nav class="sticky w-full top-0 flex py-1 pointer-events-auto bg-white/75 dark:bg-neutral-900/75 backdrop-blur z-10">
@@ -178,7 +180,7 @@
         {/each}
     </div>
 
-    <button title="登録" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4" on:click={() => addcontent.showModal()}>
+    <button title="登録" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4" on:click={() => addcontent.showModal()} disabled={(new Date() > conf.limit)}>
         <Icon icon="heroicons:plus-solid" />
     </button>
 </main>
@@ -249,7 +251,7 @@
             <input type="hidden" name="duration" value={acontent.duration} />
             <input type="hidden" name="countdown" value={acontent.countdown} />
             <input type="hidden" name="approved" value={acontent.approved ? "true" : "false"} />
-            <button type="submit">登録</button>
+            <button type="submit" on:click={() => {sending.showModal()}}>登録</button>
         </form>
     </div>
 </dialog>

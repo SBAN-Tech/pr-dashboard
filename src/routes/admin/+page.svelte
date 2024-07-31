@@ -115,8 +115,8 @@
         };
         editdialog.showModal();
     };
+    let removing = false;
     const update = async (result: ActionResult<Record<string, unknown> | undefined, Record<string, unknown> | undefined>) => {
-        updating.showModal();
         editing = content_table_init;
         await applyAction(result);
         contents = form?.contents ? form?.contents : contents;
@@ -128,23 +128,13 @@
             filternotapproved();
         }
         updating.close();
-        updated.showModal();
+        if (removing) {
+            removed.showModal();
+            removing = false;
+        } else {
+            updated.showModal();
+        }
     };
-    const remove = () => {
-        updating.showModal();
-        editing = content_table_init;
-        contents = form?.contents ? form?.contents : contents;
-        content_devided_by_date = content_devide_by_date(contents);
-        if (searching) {
-            search();
-        }
-        if (filteringnotapproved) {
-            filternotapproved();
-        }
-        updatecontent();
-        updating.close();
-        removed.showModal();
-    }
 
     const duration = (_d: number, _c: number) => `${_d / 60 + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
@@ -264,8 +254,8 @@
                 承認する
             </label>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
-                <button type="submit" class="order-2">変更</button>
-                <button formaction="?/remove" class="order-3 sm:order-1 pr_white_button" on:click={remove}>削除</button>
+                <button type="submit" class="order-2" on:click={() => {updating.showModal();}}>変更</button>
+                <button formaction="?/remove" class="order-3 sm:order-1 pr_white_button" on:click={() => {removing = true;updating.showModal();}}>削除</button>
             </div>
         </form>
     </div>

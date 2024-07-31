@@ -4,7 +4,7 @@
     import { style } from 'svelte-body';
     import styles from '$lib/theme';
     import prism_theme from '$lib/prism-theme';
-    import 'inter-ui/inter-variable.css';
+    import '$lib/cantarell.css';
     import '@fontsource-variable/noto-sans-jp';
     import '@fontsource/shippori-mincho';
     import '@fontsource-variable/jetbrains-mono';

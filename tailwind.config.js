@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'sans': ["'InterVariable'", "'Noto Sans JP Variable'", 'sans-serif'],
+        'sans': ["'Cantarell'", "'Noto Sans JP Variable'", 'sans-serif'],
         'serif': ["'Shippori Mincho'", 'serif'],
         'mono': ["'JetBrains Mono Variable'", "'Noto Sans JP Variable'", 'monospace'],
       },
