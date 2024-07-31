@@ -23,7 +23,7 @@ bunx wrangler d1 create prname
 このとき表示された`database_name`と`database_id`を`wrangler.toml`の`[[d1_databases]]`のとこに書いときましょう
 
 ```sh
-bunx wrangler d1 execute prname --file migrations/0000_ancient_gwen_stacy.sql
+bunx wrangler d1 execute prname --remote --file migrations/0000_ancient_gwen_stacy.sql
 ```
 
 ### 2. Authentication
