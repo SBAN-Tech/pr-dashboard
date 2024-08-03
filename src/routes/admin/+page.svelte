@@ -28,7 +28,7 @@
         auther: "",
         category: "",
         description: "",
-        time: conf.start.toISOString(),
+        time: date_tz_format(conf.start, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: conf.timezone }),
         duration: 0,
         countdown: 2,
         approved: false
@@ -108,7 +108,7 @@
             auther: econtent.auther,
             category: econtent.category,
             description: econtent.description,
-            time: econtent.time.toISOString(),
+            time: date_tz_format(econtent.time, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: conf.timezone }),
             duration: econtent.duration,
             countdown: econtent.countdown,
             approved: econtent.approved
@@ -136,7 +136,7 @@
         }
     };
 
-    const duration = (_d: number, _c: number) => `${_d / 60 + _c}:${((_d % 60) + "").padStart(2, "0")}`;
+    const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
     onMount(async () => {
         const dialogPolyfill = (await import('dialog-polyfill')).default;
@@ -245,7 +245,7 @@
             <input type="hidden" name="auther" value={editing.auther} />
             <input type="hidden" name="category" value={editing.category} />
             <input type="hidden" name="description" value={editing.description} />
-            <input type="hidden" name="time" value={date_tz_format(fromZonedTime(editing.time, conf.timezone), "yyyy-MM-dd'T'HH:mm:ssXXXXX", {timeZone: conf.timezone})} />
+            <input type="hidden" name="time" value={editing.time} />
             <input type="hidden" name="duration" value={editing.duration} />
             <input type="hidden" name="countdown" value={editing.countdown} />
             <input type="hidden" name="approved" value={editing.approved ? "true" : "false"} />

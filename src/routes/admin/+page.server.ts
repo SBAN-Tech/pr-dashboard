@@ -21,7 +21,7 @@ export const actions: Actions = {
         let duration = data.get("duration")?.toString();
         let countdown = data.get("countdown")?.toString();
         let content: Partial<ContentDBTable> = {
-            id: (data.get("id")?.toString() == "") ? data.get("id")?.toString() : null,
+            id: (data.get("id")?.toString() == "") ? data.get("id")?.toString() : undefined,
             title: data.get("title") ? data.get("title")?.toString() : undefined,
             auther: data.get("auther") ? data.get("auther")?.toString() : undefined,
             category: data.get("category") ? data.get("category")?.toString() : undefined,

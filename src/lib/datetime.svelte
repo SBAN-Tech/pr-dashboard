@@ -5,12 +5,13 @@
 
     let first: HTMLInputElement;    
 
-    let v = [format(conf.start, "yyyy-MM-dd", { timeZone: conf.timezone }), format(conf.start, "HH", { timeZone: conf.timezone }), format(conf.start, "mm", { timeZone: conf.timezone })];
-    export let value = `${v[0]}T${v[1]}:${v[2]}`;
+    export let value: string;
+    let v = value.split(/T|\s|:|\+/).slice(0, 3);
+    $: v = value.split(/T|\s|:|\+/).slice(0, 3);
 
     const oninput = (i: number) => {
         v[i] = `00${v[i]}`.replaceAll(/[^0-9]/g, '').slice(-2);
-        value = `${v[0]} ${v[1]}:${v[2]}:00`;
+        value = `${v[0]}T${v[1]}:${v[2]}:00${format(new Date(), "XXX", { timeZone: conf.timezone })}`;
     }
 </script>
 

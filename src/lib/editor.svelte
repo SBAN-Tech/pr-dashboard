@@ -2,28 +2,8 @@
     import conf from "~/src/config.toml";
     import Duration from '$lib/duration.svelte';
     import Datetime from '$lib/datetime.svelte';
-    import { browser } from "$app/environment";
     import { format, toZonedTime } from 'date-fns-tz';
-    export let content: ContentDBTable = {
-        id: null,
-        title: "",
-        auther: "",
-        category: "",
-        description: "",
-        time:"",
-        duration: 0,
-        countdown: 2,
-        approved: true
-    };
-    const is_datetime_supported = () => {
-        if (browser) {
-            let _e = document.createElement("input");
-            _e.setAttribute("type", "datetime-local");
-            return _e.type === "datetime-local";
-        } else {
-            return true;
-        }
-    }
+    export let content: ContentDBTable;
 </script>
 
 <h3>タイトル</h3>

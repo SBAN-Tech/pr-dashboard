@@ -1,8 +1,9 @@
 <script lang="ts">
     let first: HTMLInputElement;    
 
-    let v = ["00", "00"];
-    export let value = 0;
+    export let value: number;
+    let v = [`00${Math.floor(value /60)}`.slice(-2), `00${value % 60}`.slice(-2)];
+    $: v = [`00${Math.floor(value /60)}`.slice(-2), `00${value % 60}`.slice(-2)];
 
     const oninput = (i: number) => {
         v[i] = `00${v[i]}`.replaceAll(/[^0-9]/g, '').slice(-2);

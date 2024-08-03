@@ -31,7 +31,7 @@
         auther: "",
         category: "",
         description: "",
-        time: new Date(),
+        time: conf.start,
         duration: 0,
         countdown: 0,
         approved: true
@@ -42,7 +42,7 @@
         auther: "",
         category: "",
         description: "",
-        time: conf.start.toISOString(),
+        time: date_tz_format(conf.start, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: conf.timezone }),
         duration: 0,
         countdown: 2,
         approved: false
@@ -89,7 +89,7 @@
         }
     });
 
-    const duration = (_d: number, _c: number) => `${_d / 60 + _c}:${((_d % 60) + "").padStart(2, "0")}`;
+    const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
     let vinfo_content = content_init;
     const openvinfo = (_c: Content) => {
@@ -163,7 +163,7 @@
                             </p>
                         </div>
                         <div class="flex flex-row gap-1 ml-auto items-center text-xl">
-                            {#if content.id}
+                            {#if content.id && content.approved}
                                 <a href={`https://youtu.be/${content.id}`} target="_blank">
                                     <button title="再生" class="pr_icon_button">
                                         <Icon icon="heroicons:play-solid" />
