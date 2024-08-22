@@ -72,16 +72,14 @@
     let content_devided_by_date = content_devide_by_date(contents);
 
     const updatecontent = async () => {
-        contents = (await data.contents);
+        contents = await (await fetch("/api/db/get")).json() as Array<Content>;
         content_devided_by_date = content_devide_by_date(contents);
     };
 
     onMount(async () => {
-        const dialogPolyfill = (await import('dialog-polyfill')).default;
-
         updatecontent();
-
         if (browser) {
+            const dialogPolyfill = (await import('dialog-polyfill')).default;
             dialogPolyfill.registerDialog(vinfo);
             dialogPolyfill.registerDialog(addcontent);
             dialogPolyfill.registerDialog(sending);
@@ -180,7 +178,7 @@
         {/each}
     </div>
 
-    <button title="登録" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4" on:click={() => addcontent.showModal()} disabled={(new Date() > conf.limit)}>
+    <button title="登録" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4 z-20" on:click={() => addcontent.showModal()} disabled={(new Date() > conf.limit)}>
         <Icon icon="heroicons:plus-solid" />
     </button>
 </main>

@@ -1,12 +1,6 @@
-import type { PageServerLoad, Actions } from "./$types";
+import type { Actions } from "./$types";
 import db from "$lib/db";
 import { fail } from "@sveltejs/kit";
-
-export const load: PageServerLoad = async ({platform}) => {
-    return {
-        contents: db.get(platform?.env?.DB)
-    };
-}
 
 export const actions: Actions = {
     update: async ({platform, request}) => {

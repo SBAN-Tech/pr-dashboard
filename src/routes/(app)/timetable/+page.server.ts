@@ -1,13 +1,7 @@
 import conf from "~/src/config.toml";
-import type { PageServerLoad, Actions } from "./$types";
+import type { Actions } from "./$types";
 import db from "$lib/db";
 import { fail } from "@sveltejs/kit";
-
-export const load: PageServerLoad = async ({platform}) => {
-    return {
-        contents: db.get(platform?.env?.DB)
-    };
-}
 
 export const actions: Actions = {
     insert: async ({platform, request}) => {

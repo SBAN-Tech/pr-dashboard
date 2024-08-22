@@ -1,7 +1,7 @@
 <script lang="ts">
     import conf from '~/src/config.toml';
     import Editor from "$lib/editor.svelte";
-    import type { PageData, ActionData } from "./$types";
+    import type { ActionData } from "./$types";
     import { page } from "$app/stores";
     import { enhance, applyAction } from '$app/forms';
 	import { onMount } from "svelte";
@@ -11,7 +11,7 @@
     import { loadDefaultJapaneseParser as bx } from 'budoux';
 	import { goto } from '$app/navigation';
 	import type { ActionResult } from '@sveltejs/kit';
-    export let data: PageData;
+	import { browser } from '$app/environment';
     export let form: ActionData;
 
     let editdialog: HTMLDialogElement;
@@ -57,7 +57,7 @@
     };
     let content_devided_by_date = content_devide_by_date(contents);
     const updatecontent = async () => {
-        contents = (await data.contents);
+        contents = await (await fetch("/api/db/get")).json() as Array<Content>;
         content_devided_by_date = content_devide_by_date(contents);
         if (searching) {
             search();
@@ -139,14 +139,16 @@
     const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
     onMount(async () => {
-        const dialogPolyfill = (await import('dialog-polyfill')).default;
         ok = await (await fetch(`${import.meta.env.BASE_URL}api/discord/isloginable`)).json() as boolean;
         updatecontent();
-        dialogPolyfill.registerDialog(editdialog);
-        dialogPolyfill.registerDialog(updating);
-        dialogPolyfill.registerDialog(updated);
-        dialogPolyfill.registerDialog(removed);
-        dialogPolyfill.registerDialog(searchdialog);
+        if (browser) {
+            const dialogPolyfill = (await import('dialog-polyfill')).default;
+            dialogPolyfill.registerDialog(editdialog);
+            dialogPolyfill.registerDialog(updating);
+            dialogPolyfill.registerDialog(updated);
+            dialogPolyfill.registerDialog(removed);
+            dialogPolyfill.registerDialog(searchdialog);
+        }
     });
 </script>
 
@@ -157,7 +159,7 @@
 <main class="h-[calc(100vh_-_3.25rem)] gap-0 pb-0 -mb-4">
     {#if $page.data.session?.user}
         {#if ok}
-            <div class="overflow-y-scroll flex-1">
+            <div class="overflow-y-scroll flex-1 pb-4">
                 {#if content_devided_by_date.length == 0}
                     <p>ないらしい</p>
                 {/if}
@@ -213,7 +215,7 @@
                     </div>
                 {/each}
             </div>
-            <button title="検索" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4" on:click={() => searchdialog.showModal()}>
+            <button title="検索" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4 z-20" on:click={() => searchdialog.showModal()}>
                 <Icon icon="heroicons:magnifying-glass-solid" />
             </button>
         {:else}
