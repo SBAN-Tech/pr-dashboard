@@ -2,7 +2,7 @@
     import conf from '~/src/config.toml';
     import PageHeader from '$lib/page-header.svelte';
     import Editor from "$lib/editor.svelte";
-    import type { PageData, ActionData } from './$types';
+    import type { ActionData } from './$types';
     import { onMount } from "svelte";
     import { browser } from "$app/environment";
     import Markdown from 'svelte-exmarkdown';
@@ -16,7 +16,6 @@
 	import { goto } from '$app/navigation';
 	import type { ActionResult } from '@sveltejs/kit';
 
-    export let data: PageData;
     export let form: ActionData;
 
     let vinfo: HTMLDialogElement;
