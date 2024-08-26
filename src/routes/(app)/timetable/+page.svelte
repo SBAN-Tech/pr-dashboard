@@ -2,21 +2,15 @@
     import conf from '~/src/config.toml';
     import PageHeader from '$lib/page-header.svelte';
     import Editor from "$lib/editor.svelte";
-    import type { ActionData } from './$types';
     import { onMount } from "svelte";
     import { browser } from "$app/environment";
     import Markdown from 'svelte-exmarkdown';
     import { gfmPlugin } from 'svelte-exmarkdown/gfm';
     import rehypePrism from "rehype-prism-plus";
     import { compareAsc } from "date-fns";
-    import { format as date_tz_format, fromZonedTime } from "date-fns-tz";
+    import { format as date_tz_format } from "date-fns-tz";
     import Icon from "@iconify/svelte";
-    import { loadDefaultJapaneseParser as bx } from 'budoux';
-	import { applyAction, enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import type { ActionResult } from '@sveltejs/kit';
-
-    export let form: ActionData;
+    import { loadDefaultJapaneseParser as bx } from "budoux";
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
@@ -96,10 +90,14 @@
 
     let acontent = content_table_init;
 
-    const send = async (result: ActionResult<Record<string, unknown> | undefined, Record<string, unknown> | undefined>) => {
-        await applyAction(result);
+    const send = async () => {
+        sending.showModal();
+        let res: Array<Content> = await (await fetch("/api/db/new", {
+            method: "POST",
+            body: JSON.stringify(acontent)
+        })).json();
         acontent = content_table_init;
-        contents = form?.contents ? form?.contents : contents;
+        contents = res ? res : contents;
         content_devided_by_date = content_devide_by_date(contents);
         sending.close();
         sent.showModal();
@@ -229,27 +227,8 @@
         <Icon icon="heroicons:x-mark-solid" />
     </button>
     <div class="w-10/12 mx-auto">
-        <form method="post" action="?/insert" use:enhance={() => {
-            return async ({ result }) => {
-                if (result.type === 'redirect') {
-                    goto(result.location);
-                } else {
-                    await send(result);
-                }
-            };
-        }}>
-            <Editor bind:content={acontent} />
-            <input type="hidden" name="id" value={acontent.id} />
-            <input type="hidden" name="title" value={acontent.title} />
-            <input type="hidden" name="auther" value={acontent.auther} />
-            <input type="hidden" name="category" value={acontent.category} />
-            <input type="hidden" name="description" value={acontent.description} />
-            <input type="hidden" name="time" value={date_tz_format(fromZonedTime(acontent.time, conf.timezone), "yyyy-MM-dd'T'HH:mm:ssXXXXX", {timeZone: conf.timezone})} />
-            <input type="hidden" name="duration" value={acontent.duration} />
-            <input type="hidden" name="countdown" value={acontent.countdown} />
-            <input type="hidden" name="approved" value={acontent.approved ? "true" : "false"} />
-            <button type="submit" on:click={() => {sending.showModal()}}>登録</button>
-        </form>
+        <Editor bind:content={acontent} />
+        <button type="submit" on:click={send}>登録</button>
     </div>
 </dialog>
 

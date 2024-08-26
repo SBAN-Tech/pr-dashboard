@@ -1,18 +1,13 @@
 <script lang="ts">
     import conf from '~/src/config.toml';
     import Editor from "$lib/editor.svelte";
-    import type { ActionData } from "./$types";
     import { page } from "$app/stores";
-    import { enhance, applyAction } from '$app/forms';
 	import { onMount } from "svelte";
     import { compareAsc } from "date-fns";
     import { format as date_tz_format, fromZonedTime } from "date-fns-tz";
     import Icon from "@iconify/svelte";
     import { loadDefaultJapaneseParser as bx } from 'budoux';
-	import { goto } from '$app/navigation';
-	import type { ActionResult } from '@sveltejs/kit';
 	import { browser } from '$app/environment';
-    export let form: ActionData;
 
     let editdialog: HTMLDialogElement;
     let updating: HTMLDialogElement;
@@ -115,11 +110,33 @@
         };
         editdialog.showModal();
     };
-    let removing = false;
-    const update = async (result: ActionResult<Record<string, unknown> | undefined, Record<string, unknown> | undefined>) => {
+    const update = async () => {
+        updating.showModal();
+        let res: Array<Content> = await (await fetch("/api/db/update", {
+            method: "POST",
+            body: JSON.stringify({
+                ...editing,
+                key: editing_key,
+            })
+        })).json();
+        contents = res ? res : contents;
+        postupdate();
+        updated.showModal();
+    };
+    const remove = async () => {
+        updating.showModal();
+        let res: Array<Content> = await (await fetch("/api/db/remove", {
+            method: "POST",
+            body: JSON.stringify({
+                key: editing_key,
+            })
+        })).json();
+        contents = res ? res : contents;
+        postupdate();
+        removed.showModal();
+    };
+    const postupdate = () => {
         editing = content_table_init;
-        await applyAction(result);
-        contents = form?.contents ? form?.contents : contents;
         content_devided_by_date = content_devide_by_date(contents);
         if (searching) {
             search();
@@ -128,13 +145,7 @@
             filternotapproved();
         }
         updating.close();
-        if (removing) {
-            removed.showModal();
-            removing = false;
-        } else {
-            updated.showModal();
-        }
-    };
+    }
 
     const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
@@ -231,35 +242,15 @@
         <Icon icon="heroicons:x-mark-solid" />
     </button>
     <div class="w-10/12 mx-auto">
-        <form method="post" action="?/update" use:enhance={() => {
-            return async ({ result }) => {
-                if (result.type === 'redirect') {
-                    goto(result.location);
-                } else {
-                    await update(result);
-                }
-            };
-        }}>
-            <Editor bind:content={editing} />
-            <input type="hidden" name="key" value={editing_key} />
-            <input type="hidden" name="id" value={editing.id} />
-            <input type="hidden" name="title" value={editing.title} />
-            <input type="hidden" name="auther" value={editing.auther} />
-            <input type="hidden" name="category" value={editing.category} />
-            <input type="hidden" name="description" value={editing.description} />
-            <input type="hidden" name="time" value={editing.time} />
-            <input type="hidden" name="duration" value={editing.duration} />
-            <input type="hidden" name="countdown" value={editing.countdown} />
-            <input type="hidden" name="approved" value={editing.approved ? "true" : "false"} />
-            <label>
-                <input type="checkbox" bind:checked={editing.approved} />
-                承認する
-            </label>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
-                <button type="submit" class="order-2" on:click={() => {updating.showModal();}}>変更</button>
-                <button formaction="?/remove" class="order-3 sm:order-1 pr_white_button" on:click={() => {removing = true;updating.showModal();}}>削除</button>
-            </div>
-        </form>
+        <Editor bind:content={editing} />
+        <label>
+            <input type="checkbox" bind:checked={editing.approved} />
+            承認する
+        </label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+            <button class="order-2" on:click={update}>変更</button>
+            <button class="order-3 sm:order-1 pr_white_button" on:click={remove}>削除</button>
+        </div>
     </div>
 </dialog>
 
