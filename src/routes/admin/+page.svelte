@@ -6,7 +6,7 @@
     import { compareAsc } from "date-fns";
     import { format as date_tz_format, fromZonedTime } from "date-fns-tz";
     import Icon from "@iconify/svelte";
-    import { loadDefaultJapaneseParser as bx } from 'budoux';
+    import { Parser as BXParser, jaModel } from 'budoux';
 	import { browser } from '$app/environment';
 
     let editdialog: HTMLDialogElement;
@@ -210,7 +210,7 @@
                                     <p class="text-xs text-right">({duration(content.duration, content.countdown)})</p>
                                 </div>
                                 <div class="flex flex-col gap-1 flex-1">
-                                    <p>{bx().parse(content.title).join("\u200B")}</p>
+                                    <p>{(new BXParser(jaModel)).parse(content.title).join("\u200B")}</p>
                                     <p class="text-xs flex flex-row flex-wrap gap-2">
                                         <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:user-16-solid" />{content.auther}</span>
                                         <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:folder-20-solid" />{content.category}</span>

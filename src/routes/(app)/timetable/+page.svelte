@@ -10,7 +10,7 @@
     import { compareAsc } from "date-fns";
     import { format as date_tz_format } from "date-fns-tz";
     import Icon from "@iconify/svelte";
-    import { loadDefaultJapaneseParser as bx } from "budoux";
+    import { Parser as BXParser, jaModel } from "budoux";
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
@@ -151,7 +151,7 @@
                             <p class="text-xs text-right">({duration(content.duration, content.countdown)})</p>
                         </div>
                         <div class="flex flex-col gap-1 flex-1">
-                            <p>{bx().parse(content.title).join("\u200B")}</p>
+                            <p>{(new BXParser(jaModel)).parse(content.title).join("\u200B")}</p>
                             <p class="text-xs flex flex-row flex-wrap gap-2">
                                 <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:user-16-solid" />{content.auther}</span>
                                 <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:folder-20-solid" />{content.category}</span>
@@ -184,7 +184,7 @@
     <button title="閉じる" class="pr_dialog_close" on:click={() => vinfo.close()}>
         <Icon icon="heroicons:x-mark-solid" />
     </button>
-    <h2 class="text-center mb-4">{bx().parse(vinfo_content.title).join("\u200B")}</h2>
+    <h2 class="text-center mb-4">{(new BXParser(jaModel)).parse(vinfo_content.title).join("\u200B")}</h2>
     <div class="grid sm:grid-cols-2 gap-4 items-center h-full">
         <div class="text-center">
             {#if vinfo_content.id == ""}
@@ -196,13 +196,13 @@
         <div class="flex flex-col h-full">
             <h3>動画情報</h3>
             <div class="flex-1">
-                <Markdown md={bx().parse(vinfo_content.description).join("\u200B")} plugins={[gfmPlugin(), {rehypePlugin: rehypePrism}]} />
+                <Markdown md={(new BXParser(jaModel)).parse(vinfo_content.description).join("\u200B")} plugins={[gfmPlugin(), {rehypePlugin: rehypePrism}]} />
             </div>
             <table>
                 <tbody>
                     <tr>
                         <th>投稿者</th>
-                        <td>{bx().parse(vinfo_content.auther).join("\u200B")}</td>
+                        <td>{(new BXParser(jaModel)).parse(vinfo_content.auther).join("\u200B")}</td>
                     </tr>
                     <tr>
                         <th>公開日時</th>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import conf from '~/src/config.toml';
     import Markdown, { allowlist } from 'svelte-exmarkdown';
-    import { loadDefaultJapaneseParser as bx } from 'budoux';
+    import { Parser as BXParser, jaModel } from 'budoux';
     import '@fontsource/reggae-one';
 </script>
 
@@ -22,8 +22,8 @@
             {/if}
         </div>
         <div class="sm:col-span-3 flex flex-col">
-            <h2 class="text-center font-serif">{bx().parse(conf.tagline).join("\u200B")}</h2>
-            <div class="flex-1"><Markdown md={bx().parse(conf.description).join("\u200B")} plugins={[allowlist(["p", "strong", "em", "del", "a", "code"])]} /></div>
+            <h2 class="text-center font-serif">{(new BXParser(jaModel)).parse(conf.tagline).join("\u200B")}</h2>
+            <div class="flex-1"><Markdown md={(new BXParser(jaModel)).parse(conf.description).join("\u200B")} plugins={[allowlist(["p", "strong", "em", "del", "a", "code"])]} /></div>
             {#if new Date() > conf.limit}
                 <p class="font-['Reggae_One'] text-xl text-red-600 dark:text-red-500">募集は終了しました</p>
             {/if}
