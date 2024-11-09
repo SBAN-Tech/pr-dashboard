@@ -1,3 +1,1 @@
-import type { Session } from "@auth/sveltekit";
-
-export const isloginable = (session: Session | null, users?: Array<string>) => (session ? (session.user?.id && users) ? users.includes(session.user?.id) : false : false);
+export const isloginable = (id?: string, users?: Array<string>) => (id ? (id && users) ? users.includes(id) : false : false);

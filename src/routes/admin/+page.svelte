@@ -150,7 +150,12 @@
     const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
     onMount(async () => {
-        ok = await (await fetch(`${import.meta.env.BASE_URL}api/discord/isloginable`)).json() as boolean;
+        ok = await (await fetch(`${import.meta.env.BASE_URL}api/discord/isloginable`, {
+            method: "POST",
+            body: JSON.stringify({
+                id: ($page.data.session?.user) ? $page.data.session?.user?.id : undefined
+            })
+        })).json() as boolean;
         updatecontent();
         if (browser) {
             const dialogPolyfill = (await import('dialog-polyfill')).default;

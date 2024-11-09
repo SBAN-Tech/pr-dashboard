@@ -1,6 +1,6 @@
 name = "pr-dashboard-test"
 main = "./.cloudflare/worker.js"
-compatibility_date = "2024-07-31"
+compatibility_date = "2024-11-09"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
@@ -9,6 +9,9 @@ bucket = "./.cloudflare/public"
 
 [build]
 command = "bunx vite build"
+
+[placement]
+mode = "smart"
 
 [[d1_databases]]
 binding = "DB"
