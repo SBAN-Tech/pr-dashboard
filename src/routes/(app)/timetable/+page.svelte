@@ -7,15 +7,18 @@
     import Markdown from 'svelte-exmarkdown';
     import { gfmPlugin } from 'svelte-exmarkdown/gfm';
     import rehypePrism from "rehype-prism-plus";
-    import { compareAsc } from "date-fns";
-    import { format as date_tz_format } from "date-fns-tz";
+    import { DateTime } from 'luxon';
     import Icon from "@iconify/svelte";
     import { Parser as BXParser, jaModel } from "budoux";
+	import { ContentUtils } from '$lib/content';
+	import { DateUtils } from '$lib/date';
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
     let sending: HTMLDialogElement;
     let sent: HTMLDialogElement;
+
+    let loaded = false;
     
     const content_init: Content = {
         key: "",
@@ -24,7 +27,7 @@
         auther: "",
         category: "",
         description: "",
-        time: conf.start,
+        time: DateUtils.defaultDate(conf.start, conf.end),
         duration: 0,
         countdown: 0,
         approved: true
@@ -35,7 +38,7 @@
         auther: "",
         category: "",
         description: "",
-        time: date_tz_format(conf.start, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: conf.timezone }),
+        time: DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end)),
         duration: 0,
         countdown: 2,
         approved: false
@@ -43,17 +46,17 @@
     let contents: Array<Content> = [];
     
     const content_devide_by_date = (cs_p: Array<Content>) => {
-        let cs = cs_p.sort((a, b) => compareAsc(a.time, b.time));
+        let cs = cs_p.sort((a, b) => a.time.valueOf() - b.time.valueOf());
         let result: Array<ContentDividedbyDate> = [];
         for (let i = 0; i < cs.length; i++) {
             if (i == 0) {
                 result.push({
-                    date: date_tz_format(cs[i].time, "yyyy/MM/dd", {timeZone: conf.timezone}),
+                    date: DateUtils.getDateSlashed(cs[i].time),
                     contents: [cs[i]]
                 });
-            } else if (date_tz_format(cs[i].time, "yyyyMMdd", {timeZone: conf.timezone}) != date_tz_format(cs[i-1].time, "yyyyMMdd", {timeZone: conf.timezone})) {
+            } else if (DateTime.fromJSDate(cs[i].time, { zone: conf.timezone }).startOf("day") != DateTime.fromJSDate(cs[i-1].time, { zone: conf.timezone }).startOf("day")) {
                 result.push({
-                    date: date_tz_format(cs[i].time, "yyyy/MM/dd", {timeZone: conf.timezone}),
+                    date: DateUtils.getDateSlashed(cs[i].time),
                     contents: [cs[i]]
                 });
             } else {
@@ -67,9 +70,11 @@
     const updatecontent = async () => {
         contents = await (await fetch("/api/db/get")).json() as Array<Content>;
         content_devided_by_date = content_devide_by_date(contents);
+        loaded = true;
     };
 
     onMount(async () => {
+        loaded = false;
         updatecontent();
         if (browser) {
             const dialogPolyfill = (await import('dialog-polyfill')).default;
@@ -89,6 +94,8 @@
     };
 
     let acontent = content_table_init;
+    let available = ContentUtils.isAvailable(acontent);
+    $: available = ContentUtils.isAvailable(acontent);
 
     const send = async () => {
         sending.showModal();
@@ -112,7 +119,9 @@
 
 <main>
     <div class="m-0 flex flex-col w-full">
-        {#if content_devided_by_date.length <= 0}
+        {#if !loaded}
+            <p>Loading...</p>
+        {:else if content_devided_by_date.length <= 0}
             <p>ないらしい</p>
         {/if}
         {#each content_devided_by_date as _date, j}
@@ -147,7 +156,7 @@
                 {#each _date.contents as content}
                     <div class="pr_timetable_content pointer-events-auto">
                         <div class="flex flex-col gap-1 z-0" style={`opacity: ${content.approved ? 1 : 0.5};`}>
-                            <p>{date_tz_format(content.time, "HH:mm", {timeZone: conf.timezone})}</p>
+                            <p>{DateUtils.getTime(content.time)}</p>
                             <p class="text-xs text-right">({duration(content.duration, content.countdown)})</p>
                         </div>
                         <div class="flex flex-col gap-1 flex-1">
@@ -206,7 +215,7 @@
                     </tr>
                     <tr>
                         <th>公開日時</th>
-                        <td>{date_tz_format(vinfo_content.time, "yyyy/MM/dd HH:mm", {timeZone: conf.timezone})}</td>
+                        <td>{DateUtils.getDateSlashed(vinfo_content.time)} {DateUtils.getTime(vinfo_content.time)}</td>
                     </tr>
                     <tr>
                         <th>動画の長さ</th>
@@ -228,7 +237,10 @@
     </button>
     <div class="w-10/12 mx-auto">
         <Editor bind:content={acontent} />
-        <button type="submit" on:click={send}>登録</button>
+        {#if !available.time}
+            <p class="text-red-600 dark:text-red-500">設定された日時は対象期間外です。</p>
+        {/if}
+        <button type="submit" on:click={send} disabled={Object.values(available).includes(false)}>登録</button>
     </div>
 </dialog>
 

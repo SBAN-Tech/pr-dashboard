@@ -3,11 +3,12 @@
     import Editor from "$lib/editor.svelte";
     import { page } from "$app/stores";
 	import { onMount } from "svelte";
-    import { compareAsc } from "date-fns";
-    import { format as date_tz_format, fromZonedTime } from "date-fns-tz";
+    import { DateTime } from "luxon";
     import Icon from "@iconify/svelte";
-    import { Parser as BXParser, jaModel } from 'budoux';
+    import { Parser as BXParser, jaModel } from "budoux";
 	import { browser } from '$app/environment';
+	import { ContentUtils } from '$lib/content';
+	import { DateUtils } from '~/src/lib/date';
 
     let editdialog: HTMLDialogElement;
     let updating: HTMLDialogElement;
@@ -16,6 +17,7 @@
     let searchdialog: HTMLDialogElement;
 
     let ok = false;
+    let loaded = false;
 
     const content_table_init: ContentDBTable = {
         id: null,
@@ -23,7 +25,7 @@
         auther: "",
         category: "",
         description: "",
-        time: date_tz_format(conf.start, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: conf.timezone }),
+        time: DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end)),
         duration: 0,
         countdown: 2,
         approved: false
@@ -31,17 +33,17 @@
 
     let contents: Array<Content> = [];
     const content_devide_by_date = (cs_p: Array<Content>) => {
-        let cs = cs_p.sort((a, b) => compareAsc(a.time, b.time));
+        let cs = cs_p.sort((a, b) => a.time.valueOf() - b.time.valueOf());
         let result: Array<ContentDividedbyDate> = [];
         for (let i = 0; i < cs.length; i++) {
             if (i == 0) {
                 result.push({
-                    date: date_tz_format(cs[i].time, "yyyy/MM/dd", {timeZone: conf.timezone}),
+                    date: DateUtils.getDateSlashed(cs[i].time),
                     contents: [cs[i]]
                 });
-            } else if (date_tz_format(cs[i].time, "yyyyMMdd", {timeZone: conf.timezone}) != date_tz_format(cs[i-1].time, "yyyyMMdd", {timeZone: conf.timezone})) {
+            } else if (DateTime.fromJSDate(cs[i].time, { zone: conf.timezone }).startOf("day") != DateTime.fromJSDate(cs[i-1].time, { zone: conf.timezone }).startOf("day")) {
                 result.push({
-                    date: date_tz_format(cs[i].time, "yyyy/MM/dd", {timeZone: conf.timezone}),
+                    date: DateUtils.getDateSlashed(cs[i].time),
                     contents: [cs[i]]
                 });
             } else {
@@ -60,6 +62,7 @@
         if (filteringnotapproved) {
             filternotapproved();
         }
+        loaded = true;
     };
 
     let searching = false;
@@ -95,6 +98,8 @@
 
     let editing = content_table_init;
     let editing_key = "";
+    let available = ContentUtils.isAvailable(editing);
+    $: available = ContentUtils.isAvailable(editing);
     const edit = (econtent: Content) => {
         editing_key = econtent.key;
         editing = {
@@ -103,7 +108,7 @@
             auther: econtent.auther,
             category: econtent.category,
             description: econtent.description,
-            time: date_tz_format(econtent.time, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: conf.timezone }),
+            time: DateUtils.toISO(econtent.time),
             duration: econtent.duration,
             countdown: econtent.countdown,
             approved: econtent.approved
@@ -150,6 +155,7 @@
     const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
     onMount(async () => {
+        loaded = false;
         ok = await (await fetch(`${import.meta.env.BASE_URL}api/discord/isloginable`, {
             method: "POST",
             body: JSON.stringify({
@@ -176,7 +182,9 @@
     {#if $page.data.session?.user}
         {#if ok}
             <div class="overflow-y-scroll flex-1 pb-4">
-                {#if content_devided_by_date.length == 0}
+                {#if !loaded}
+                    <p>Loading...</p>
+                {:else if content_devided_by_date.length == 0}
                     <p>ないらしい</p>
                 {/if}
                 {#each content_devided_by_date as _date, j}
@@ -211,7 +219,7 @@
                         {#each _date.contents as content}
                             <div class="pr_timetable_content pointer-events-auto">
                                 <div class="flex flex-col gap-1 z-0" style={`opacity: ${content.approved ? 1 : 0.5};`}>
-                                    <p>{date_tz_format(content.time, "HH:mm", {timeZone: conf.timezone})}</p>
+                                    <p>{DateUtils.getTime(content.time)}</p>
                                     <p class="text-xs text-right">({duration(content.duration, content.countdown)})</p>
                                 </div>
                                 <div class="flex flex-col gap-1 flex-1">
@@ -252,8 +260,11 @@
             <input type="checkbox" bind:checked={editing.approved} />
             承認する
         </label>
+        {#if !available.time}
+            <p class="text-red-600 dark:text-red-500">設定された日時は対象期間外です。</p>
+        {/if}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
-            <button class="order-2" on:click={update}>変更</button>
+            <button class="order-2" on:click={update} disabled={Object.values(available).includes(false)}>変更</button>
             <button class="order-3 sm:order-1 pr_white_button" on:click={remove}>削除</button>
         </div>
     </div>

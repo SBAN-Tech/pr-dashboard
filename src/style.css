@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root, html, body {
-    @apply flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal break-keep dark:bg-neutral-900 dark:text-white;
+    @apply h-full flex flex-col text-[13pt] text-neutral-800 max-w-none font-sans leading-normal break-keep dark:bg-neutral-900 dark:text-white;
     overflow-wrap: anywhere;
 }
 
 @supports (width: 100dvw) {
     :root, html, body {
-        @apply w-[100dvw] h-[100dvh];
+        @apply w-[100dvw] min-h-[100dvh];
     }
 }
 @supports not (width: 100dvw) {
     :root, html, body {
-        @apply w-full h-full;
+        @apply w-full;
     }
 }
 

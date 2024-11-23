@@ -1,7 +1,7 @@
 <script lang="ts">
     import conf from '~/src/config.toml';
-    import { eachDayOfInterval } from 'date-fns';
-    import { format } from 'date-fns-tz';
+    import { DateTime } from 'luxon';
+    import { DateUtils } from '$lib/date';
 
     let first: HTMLInputElement;    
 
@@ -11,15 +11,15 @@
 
     const oninput = (i: number) => {
         v[i] = `00${v[i]}`.replaceAll(/[^0-9]/g, '').slice(-2);
-        value = `${v[0]}T${v[1]}:${v[2]}:00${format(new Date(), "XXX", { timeZone: conf.timezone })}`;
+        value = `${v[0]}T${v[1]}:${v[2]}:00${DateTime.now().setZone(conf.timezone).toFormat("ZZ")}`;
     }
 </script>
 
 <div class="w-full grid grid-cols-3 gap-2">
     <select bind:value={v[0]} class="col-span-1">
-        {#each eachDayOfInterval({start: conf.start, end: conf.end}) as d}
-            <option value={format(d, "yyyy-MM-dd", { timeZone: conf.timezone })}>
-                {format(d, "M/d", { timeZone: conf.timezone })}
+        {#each DateUtils.eachDays(DateUtils.defaultDate(conf.start, conf.end), conf.end, conf.timezone) as d}
+            <option value={d?.toFormat("yyyy-MM-dd")}>
+                {d?.toFormat("M/d")}
             </option>
         {/each}
     </select>

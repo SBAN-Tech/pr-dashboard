@@ -2,7 +2,7 @@ import { contents } from "~/src/db/schema";
 import type { D1Database } from "@cloudflare/workers-types";
 import { drizzle } from "drizzle-orm/d1";
 import { eq } from "drizzle-orm";
-import { parseISO } from "date-fns";
+import { DateTime } from "luxon";
 import { ulid } from "ulidx";
 
 const get = async (db: D1Database | undefined) => {
@@ -17,7 +17,7 @@ const get = async (db: D1Database | undefined) => {
         auther: c.auther,
         category: c.category,
         description: c.description,
-        time: parseISO(c.time),
+        time: new Date(c.time),
         duration: c.duration,
         countdown: c.countdown,
         approved: c.approved

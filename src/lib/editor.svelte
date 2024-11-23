@@ -2,7 +2,7 @@
     import conf from "~/src/config.toml";
     import Duration from '$lib/duration.svelte';
     import Datetime from '$lib/datetime.svelte';
-    import { format, toZonedTime } from 'date-fns-tz';
+    import { DateTime } from "luxon";
     export let content: ContentDBTable;
 </script>
 
@@ -13,7 +13,7 @@
 <h3>動画ID</h3>
 <input type="text" class="w-full" bind:value={content.id} />
 <h3>公開日時</h3>
-<p>タイムゾーン: {format(toZonedTime(new Date(), conf.timezone), 'zzz', {timeZone: conf.timezone})}</p>
+<p>タイムゾーン: {DateTime.now().setZone(conf.timezone).offsetNameShort}</p>
 <Datetime bind:value={content.time} />
 <h3>動画の長さ</h3>
 <Duration bind:value={content.duration} />

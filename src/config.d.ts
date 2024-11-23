@@ -13,9 +13,15 @@ interface Config {
     limit: Date;
     end: Date;
     timezone: string;
+    guerrilla?: number;
     category: {
         list: Array<string>;
         event?: string;
+        partlist?: Array<{
+            name: string;
+            start?: Date;
+            end?: Date;
+        }>;
     };
 }
 
