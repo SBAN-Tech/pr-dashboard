@@ -4,6 +4,9 @@
     import Datetime from '$lib/datetime.svelte';
     import { DateTime } from "luxon";
     export let content: ContentDBTable;
+
+    let isevent = (conf.category.event) ? content.category == conf.category.event : false;
+    $: isevent = (conf.category.event) ? content.category == conf.category.event : false;
 </script>
 
 <h3>タイトル</h3>
@@ -16,7 +19,7 @@
 <p>タイムゾーン: {DateTime.now().setZone(conf.timezone).offsetNameShort}</p>
 <Datetime bind:value={content.time} />
 <h3>動画の長さ</h3>
-<Duration bind:value={content.duration} />
+<Duration bind:value={content.duration} bind:isevent={isevent} />
 <h3>カウントダウンの長さ</h3>
 <select class="w-full" bind:value={content.countdown}>
     {#if conf.category && content.category == conf.category.event}

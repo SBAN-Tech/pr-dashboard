@@ -124,6 +124,10 @@ input[type="datetime-local"], input[type="time"] {
     @apply text-left;
 }
 
+#duration {
+    @apply pl-2;
+}
+
 button {
     @apply flex rounded border w-full p-1 text-white items-center justify-center bg-[--primary-500] border-[--primary-500] dark:bg-[--primary-700] dark:border-[--primary-700];
 }
