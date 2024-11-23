@@ -41,7 +41,7 @@
                     date: DateUtils.getDateSlashed(cs[i].time),
                     contents: [cs[i]]
                 });
-            } else if (DateTime.fromJSDate(cs[i].time, { zone: conf.timezone }).startOf("day") != DateTime.fromJSDate(cs[i-1].time, { zone: conf.timezone }).startOf("day")) {
+            } else if (DateUtils.getDate(cs[i].time) != DateUtils.getDate(cs[i-1].time)) {
                 result.push({
                     date: DateUtils.getDateSlashed(cs[i].time),
                     contents: [cs[i]]
