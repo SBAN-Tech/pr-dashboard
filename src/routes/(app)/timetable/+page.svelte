@@ -126,7 +126,7 @@
         {/if}
         {#each content_devided_by_date as _date, j}
             <div id={`timetable_${_date.date.replaceAll("/", "")}`} class="pt-[3.25rem] -mt-[3.25rem] pointer-events-none border-b border-neutral-200 dark:border-neutral-600">
-                <nav class="sticky w-full top-0 flex py-1 pointer-events-auto bg-white/75 dark:bg-neutral-900/75 backdrop-blur z-10">
+                <nav class="sticky w-full top-[3.25rem] flex py-1 pointer-events-auto bg-white/75 dark:bg-neutral-900/75 backdrop-blur z-10">
                     <h4 class="flex-1">{_date.date}</h4>
                     <div class="flex flex-row items-center text-xl">
                         {#if j == 0}
