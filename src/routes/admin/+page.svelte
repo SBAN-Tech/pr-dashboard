@@ -3,7 +3,6 @@
     import Editor from "$lib/editor.svelte";
     import { page } from "$app/stores";
 	import { onMount } from "svelte";
-    import { DateTime } from "luxon";
     import Icon from "@iconify/svelte";
     import { Parser as BXParser, jaModel } from "budoux";
 	import { browser } from '$app/environment';
@@ -32,30 +31,10 @@
     };
 
     let contents: Array<Content> = [];
-    const content_devide_by_date = (cs_p: Array<Content>) => {
-        let cs = cs_p.sort((a, b) => a.time.valueOf() - b.time.valueOf());
-        let result: Array<ContentDividedbyDate> = [];
-        for (let i = 0; i < cs.length; i++) {
-            if (i == 0) {
-                result.push({
-                    date: DateUtils.getDateSlashed(cs[i].time),
-                    contents: [cs[i]]
-                });
-            } else if (DateUtils.getDate(cs[i].time) != DateUtils.getDate(cs[i-1].time)) {
-                result.push({
-                    date: DateUtils.getDateSlashed(cs[i].time),
-                    contents: [cs[i]]
-                });
-            } else {
-                result[result.length - 1].contents.push(cs[i]);
-            }
-        }
-        return result;
-    };
-    let content_devided_by_date = content_devide_by_date(contents);
+    let content_devided_by_date = ContentUtils.devideByDate(contents);
     const updatecontent = async () => {
         contents = await (await fetch("/api/db/get")).json() as Array<Content>;
-        content_devided_by_date = content_devide_by_date(contents);
+        content_devided_by_date = ContentUtils.devideByDate(contents);
         if (searching) {
             search();
         }
@@ -142,7 +121,7 @@
     };
     const postupdate = () => {
         editing = content_table_init;
-        content_devided_by_date = content_devide_by_date(contents);
+        content_devided_by_date = ContentUtils.devideByDate(contents);
         if (searching) {
             search();
         }
@@ -314,7 +293,7 @@
             search();
             filteringnotapproved = wfilteringnotapproved;
             filternotapproved();
-            content_devided_by_date = content_devide_by_date(scontents);
+            content_devided_by_date = ContentUtils.devideByDate(scontents);
         }}>検索</button>
     </div>
 </dialog>
