@@ -7,7 +7,7 @@ class Available {
 
 export namespace ContentUtils {
     export const devideByDate = (cs_p: Array<Content>) => {
-        let cs = cs_p.sort((a, b) => a.time.valueOf() - b.time.valueOf());
+        let cs = cs_p.sort((a, b) => (a.time > b.time) ? 1 : -1);
         let result: Array<ContentDividedbyDate> = [];
         for (let i = 0; i < cs.length; i++) {
             if (i == 0) {
