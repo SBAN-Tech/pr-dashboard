@@ -12,11 +12,7 @@ export const POST: RequestHandler = async ({locals, platform, request}) => {
         let data: ContentDBTable = data_k;
         let key = data_k.key;
         data.id = data.id ? data.id : null;
-        if (ContentUtils.isAvailable(data)) {
-            return json(await db.update(platform?.env?.DB, key, data));
-        } else {
-            return json(await db.get(platform?.env?.DB));
-        }
+        return json(await db.update(platform?.env?.DB, key, data));
     } else {
         return json(await db.get(platform?.env?.DB));
     }
