@@ -2,7 +2,6 @@ import db from "$lib/db";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
 import { isloginable } from "~/src/lib/isloginable";
-import { ContentUtils } from "$lib/content";
 
 type Data = ContentDBTable & { key: string };
 
