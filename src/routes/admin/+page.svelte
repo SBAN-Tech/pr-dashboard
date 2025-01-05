@@ -21,7 +21,8 @@
     const content_table_init: ContentDBTable = {
         id: null,
         title: "",
-        auther: "",
+        url: "",
+        author: "",
         category: "",
         description: "",
         time: DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end)),
@@ -56,13 +57,13 @@
                 searching = true;
                 scontents = contents.filter((c) => c.title.includes(sparam));
                 break;
-            case "auther":
+            case "author":
                 searching = true;
-                scontents = contents.filter((c) => c.auther.includes(sparam));
+                scontents = contents.filter((c) => c.author.includes(sparam));
                 break;
-            case "id":
+            case "url":
                 searching = true;
-                scontents = contents.filter((c) => c.id?.includes(sparam));
+                scontents = contents.filter((c) => c.url?.includes(sparam));
                 break;
             default:
                 searching = false;
@@ -84,7 +85,8 @@
         editing = {
             id: econtent.id,
             title: econtent.title,
-            auther: econtent.auther,
+            url: econtent.url,
+            author: econtent.author,
             category: econtent.category,
             description: econtent.description,
             time: DateUtils.toISO(econtent.time),
@@ -204,7 +206,7 @@
                                 <div class="flex flex-col gap-1 flex-1">
                                     <p>{(new BXParser(jaModel)).parse(content.title).join("\u200B")}</p>
                                     <p class="text-xs flex flex-row flex-wrap gap-2">
-                                        <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:user-16-solid" />{content.auther}</span>
+                                        <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:user-16-solid" />{content.author}</span>
                                         <span class="flex flex-row gap-[.125rem] items-center"><Icon icon="heroicons:folder-20-solid" />{content.category}</span>
                                     </p>
                                 </div>
@@ -280,8 +282,8 @@
             <select bind:value={slabel} class="sm:w-fit w-full">
                 <option value="none">なし</option>
                 <option value="title">タイトル</option>
-                <option value="auther">投稿者</option>
-                <option value="id">動画ID</option>
+                <option value="author">投稿者</option>
+                <option value="url">動画URL</option>
             </select>
             <input type="text" bind:value={sparam} placeholder="検索語句" />
         </p>

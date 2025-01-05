@@ -13,8 +13,9 @@ const get = async (db: D1Database | undefined) => {
     return (await d1database.select().from(contents).all() as Array<{key: string} & ContentDBTable>).map((c) => ({
         key: c.key,
         id: c.id,
+        url: c.url,
         title: c.title,
-        auther: c.auther,
+        author: c.author,
         category: c.category,
         description: c.description,
         time: new Date(c.time),

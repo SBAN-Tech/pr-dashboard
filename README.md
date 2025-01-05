@@ -60,6 +60,7 @@ openssl rand -base64 32
 |`limit`|`ISO8601`|登録締切|
 |`end`|`ISO8601`|終了日時(23:59が望ましい)|
 |`timezone`|`string`|使用するタイムゾーン<br>[Time Zone Database](https://www.iana.org/time-zones)を参照|
+|`playlidId`|`string`|再生リストのID|
 
 [category]
 |Key|Type|Description|
@@ -74,7 +75,7 @@ openssl rand -base64 32
 
 変えたら
 ```sh
-bun cf:deploy
+bun run deploy
 ```
 
 を実行すればできているはずです。

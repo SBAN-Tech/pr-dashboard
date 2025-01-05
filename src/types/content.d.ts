@@ -1,8 +1,9 @@
 interface Content {
     key: string;
     id: string | null;
+    url: string;
     title: string;
-    auther: string;
+    author: string;
     category: string;
     description: string;
     time: Date;
@@ -14,7 +15,8 @@ interface Content {
 interface ContentDBTable {
     id: string | null;
     title: string;
-    auther: string;
+    url: string;
+    author: string;
     category: string;
     description: string;
     time: string;

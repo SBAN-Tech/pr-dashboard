@@ -12,9 +12,9 @@
 <h3>タイトル</h3>
 <input type="text" class="w-full" bind:value={content.title} />
 <h3>名義</h3>
-<input type="text" class="w-full" bind:value={content.auther} />
-<h3>動画ID</h3>
-<input type="text" class="w-full" bind:value={content.id} />
+<input type="text" class="w-full" bind:value={content.author} />
+<h3>動画URL</h3>
+<input type="text" class="w-full" bind:value={content.url} />
 <h3>公開日時</h3>
 <p>タイムゾーン: {DateTime.now().setZone(conf.timezone).offsetNameShort}</p>
 <Datetime bind:value={content.time} />
