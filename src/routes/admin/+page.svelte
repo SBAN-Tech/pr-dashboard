@@ -8,7 +8,7 @@
 	import { browser } from '$app/environment';
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '~/src/lib/date';
-    import {ContentDBTable, ContentDraft, Content} from "~/src/types/content";
+    import {ContentDBTable, ContentDraft, Content} from "~/src/types/content.d";
 
     let editdialog: HTMLDialogElement;
     let updating: HTMLDialogElement;

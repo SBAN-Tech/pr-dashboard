@@ -11,7 +11,7 @@
     import { Parser as BXParser, jaModel } from "budoux";
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '$lib/date';
-    import {Content, ContentDBTable, ContentDraft} from "~/src/types/content";
+    import {Content, ContentDBTable, ContentDraft} from "~/src/types/content.d";
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
