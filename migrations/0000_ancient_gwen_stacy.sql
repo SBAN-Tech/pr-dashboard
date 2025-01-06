@@ -1,7 +1,6 @@
 CREATE TABLE `contents` (
 	`key` text PRIMARY KEY NOT NULL,
 	`id` text,
-	`url` text,
 	`title` text NOT NULL,
 	`author` text NOT NULL,
 	`category` text NOT NULL,
