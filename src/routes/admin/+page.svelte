@@ -120,7 +120,14 @@
         updating.close();
     }
 
-    const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
+    const duration = (_d: number, _c: number) => {
+        let s = _d + _c * 60;
+        if (s < 3600) {
+            return `${Math.floor(s / 60)}:${((s % 60) + "").padStart(2, "0")}`;
+        } else {
+            return `${Math.floor(s / 3600)}:${(Math.floor(s / 60) % 60 + "").padStart(2, "0")}:${((s % 60) + "").padStart(2, "0")}`;
+        }
+    }
 
     onMount(async () => {
         loaded = false;
