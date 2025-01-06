@@ -59,7 +59,7 @@ class ContentDBTable extends ContentCore {
     constructor(data: Content) {
         this = {
             ...data,
-            time = DateUtils.toISO(data.time)
+            time: DateUtils.toISO(data.time)
         }
     }
 }
