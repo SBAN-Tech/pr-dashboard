@@ -7,21 +7,6 @@ import { ContentUtils } from "$lib/content";
 export const POST: RequestHandler = async ({platform, request}) => {
     if (new Date() <= conf.limit) {
         let data: ContentDBTable = await request.json();
-        data.id = data.id ? data.id : null;
-        let url = new URL(data.url);
-        let firstPath = url.pathname.split("/")[1];
-        if(url.hostname == "youtu.be"){
-            data.id = firstPath;
-        }else if(url.hostname == "youtube.com" || url.hostname == "www.youtube.com"){
-            if(firstPath == "watch"){    
-                let params = url.searchParams;
-                data.id = params.get("v");
-            }else{
-                data.id = "";
-            }
-        }else{
-            data.id = "";
-        }
         data.approved = false;
         let time = data.time.split(/-|T|\s|:|\+/);
         if (ContentUtils.isAvailable(data)) {
@@ -32,7 +17,7 @@ export const POST: RequestHandler = async ({platform, request}) => {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        "content": `#${conf.title}\n${time[1]}/${time[2]} ${time[3]}:${time[4]}より${data.author}さんによる「${data.title}」のプレミアが5分後に始まります!\n${conf.playlistId ? (data.id ? `https://youtu.be/${data.id}?list=${conf.playlistId}` : "") : `https://youtu.be/${data.id}`}`,
+                        "content": `#${conf.title}\n${time[1]}/${time[2]} ${time[3]}:${time[4]}より${data.author}さんによる「${data.title}」のプレミアが5分後に始まります!\n${conf.list ? (data.id ? `https://youtu.be/${data.id}?list=${conf.list}` : "") : `https://youtu.be/${data.id}`}`,
                     })
                 });
             }
