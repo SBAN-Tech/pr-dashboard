@@ -51,7 +51,7 @@ openssl rand -base64 32
 |`tagline`|`string`|キャッチコピー|
 |`description`|`Markdown`|詳細|
 |`hashtag`|`string`|ハッシュタグ|
-|`list`|`string?`|再生リスト|
+|`list`|`string?`|再生リストのID|
 |`favicon`|`string`|ファビコンのURL (`static/`内はルートとして扱う)|
 |`logo`|`string`|ロゴのURL|
 |`logo_polyfill`|`string`|ロゴが読み込めないときの代替ロゴ(PNGが望ましい)のURL|
@@ -60,7 +60,6 @@ openssl rand -base64 32
 |`limit`|`ISO8601`|登録締切|
 |`end`|`ISO8601`|終了日時(23:59が望ましい)|
 |`timezone`|`string`|使用するタイムゾーン<br>[Time Zone Database](https://www.iana.org/time-zones)を参照|
-|`playlistId`|`string`|再生リストのID|
 
 [category]
 |Key|Type|Description|
