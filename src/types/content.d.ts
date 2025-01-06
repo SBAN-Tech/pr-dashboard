@@ -1,6 +1,6 @@
 import conf from "~/src/config.toml";
 import { DateUtils } from "$lib/date";
-import type { ulid } from "ulidx";
+import { ulid } from "ulidx";
 
 declare class ContentCore {
     title: string;
