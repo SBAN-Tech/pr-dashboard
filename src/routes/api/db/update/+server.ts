@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({locals, platform, request}) => {
         if(url.hostname == "youtu.be"){
             data.id = firstPath;
         }else if(url.hostname == "youtube.com" || url.hostname == "www.youtube.com"){
-            if(firstPath == "watch"){    
+            if(firstPath == "watch"){
                 let params = url.searchParams;
                 data.id = params.get("v");
             }else{
