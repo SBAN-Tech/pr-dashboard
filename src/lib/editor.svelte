@@ -2,8 +2,9 @@
     import conf from "~/src/config.toml";
     import Duration from '$lib/duration.svelte';
     import Datetime from '$lib/datetime.svelte';
+    import {ContentDBTable, type ContentDraft} from "~/src/types/content";
     import { DateTime } from "luxon";
-    export let content: ContentDBTable;
+    export let content: ContentDraft | ContentDBTable;
 
     let isevent = (conf.category.event) ? content.category == conf.category.event : false;
     $: isevent = (conf.category.event) ? content.category == conf.category.event : false;
@@ -13,8 +14,13 @@
 <input type="text" class="w-full" bind:value={content.title} />
 <h3>名義</h3>
 <input type="text" class="w-full" bind:value={content.author} />
-<h3>動画URL</h3>
-<input type="text" class="w-full" bind:value={content.url} />
+{#if content instanceof ContentDBTable}
+    <h3>動画ID</h3>
+    <input type="text" class="w-full" bind:value={content.id} />
+{:else}
+    <h3>動画URL</h3>
+    <input type="text" class="w-full" bind:value={content.url} />
+{/if}
 <h3>公開日時</h3>
 <p>タイムゾーン: {DateTime.now().setZone(conf.timezone).offsetNameShort}</p>
 <Datetime bind:value={content.time} />
