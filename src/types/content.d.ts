@@ -50,18 +50,10 @@ export class ContentDBTable extends ContentCore {
                 time: DateUtils.toISO(data.time)
             } satisfies ContentDBTable;
         } else {
-            let u = new URL(data.url);
             let id: string | null;
-            let firstPath = url.pathname.split("/")[1];
-            if (u.hostname == "youtu.be") {
-                id = firstPath;
-            } else if(u.hostname == "youtube.com" || url.hostname == "www.youtube.com") {
-                if (firstPath == "watch") {    
-                    let params = u.searchParams;
-                    id = params.get("v");
-                } else {
-                    id = null;
-                }
+            let match = data.url.match(/(?<=\/|v=|^)([A-Za-z0-9_-]{11})(?=\?|&|$)/);
+            if (match) {
+                id = match[0];
             } else {
                 id = null;
             }
