@@ -3,11 +3,13 @@ import db from "$lib/db";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
 import { ContentUtils } from "$lib/content";
+import { ContentDBTable } from "~/src/types/content";
 
 export const POST: RequestHandler = async ({platform, request}) => {
     if (new Date() <= conf.limit) {
         let data: ContentDBTable = await request.json();
         data.approved = false;
+        data.id = data.id ? data.id : null;
         let time = data.time.split(/-|T|\s|:|\+/);
         if (ContentUtils.isAvailable(data)) {
             if (platform?.env.DISCORD_WEBHOOK_URL) {

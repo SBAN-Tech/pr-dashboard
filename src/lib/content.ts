@@ -1,6 +1,6 @@
 import conf from "~/src/config.toml";
 import { DateUtils } from "./date";
-import type { Content, ContentDBTable, ContentDividedbyDate } from "../types/content";
+import { Content, ContentDraft, ContentDBTable, type ContentDividedbyDate } from "../types/content";
 
 class Available {
     time: boolean = false;
@@ -27,7 +27,7 @@ export namespace ContentUtils {
         }
         return result;
     };
-    export const isAvailable = (content: ContentDBTable) => {
+    export const isAvailable = (content: ContentDraft | ContentDBTable) => {
         // check time
         let result = new Available();
         if (conf.category.partlist && conf.category.partlist?.map((c) => c.name).includes(content.category)) {

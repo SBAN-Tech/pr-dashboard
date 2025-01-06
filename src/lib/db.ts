@@ -2,27 +2,14 @@ import { contents } from "~/src/db/schema";
 import type { D1Database } from "@cloudflare/workers-types";
 import { drizzle } from "drizzle-orm/d1";
 import { eq } from "drizzle-orm";
-import { DateTime } from "luxon";
-import { ulid } from "ulidx";
+import {Content, ContentDBTable, ContentDraft} from "~/src/types/content";
 
 const get = async (db: D1Database | undefined) => {
     if (!db) {
         throw Error("Cannot find database.");
     }
     const d1database = drizzle(db);
-    return (await d1database.select().from(contents).all() as Array<{key: string} & ContentDBTable>).map((c) => ({
-        key: c.key,
-        id: c.id,
-        url: c.url,
-        title: c.title,
-        author: c.author,
-        category: c.category,
-        description: c.description,
-        time: new Date(c.time),
-        duration: c.duration,
-        countdown: c.countdown,
-        approved: c.approved
-    })) as Array<Content>;
+    return (await d1database.select().from(contents).all() satisfies Array<ContentDBTable>).map((c) => (new Content(c)));
 };
 
 const insert = async (db: D1Database | undefined, table: ContentDBTable) => {
@@ -30,8 +17,7 @@ const insert = async (db: D1Database | undefined, table: ContentDBTable) => {
         throw Error("Cannot find database.");
     }
     const d1database = drizzle(db);
-    let key = ulid();
-    await d1database.insert(contents).values(Object.assign({key}, table)).execute();
+    await d1database.insert(contents).values(Object.assign(table)).execute();
     return await get(db);
 }
 

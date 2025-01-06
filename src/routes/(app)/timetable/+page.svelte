@@ -11,6 +11,7 @@
     import { Parser as BXParser, jaModel } from "budoux";
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '$lib/date';
+    import {Content, ContentDBTable, ContentDraft} from "~/src/types/content";
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
@@ -19,35 +20,12 @@
 
     let loaded = false;
     
-    const content_init: Content = {
-        key: "",
-        id: null,
-        title: "",
-        author: "",
-        category: "",
-        description: "",
-        time: DateUtils.defaultDate(conf.start, conf.end),
-        duration: 0,
-        countdown: 0,
-        approved: true
-    };
-    const content_table_init: ContentDBTable = {
-        id: null,
-        title: "",
-        author: "",
-        category: "",
-        description: "",
-        time: DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end)),
-        duration: 0,
-        countdown: 2,
-        approved: false
-    };
     let contents: Array<Content> = [];
     
     let content_devided_by_date = ContentUtils.devideByDate(contents);
 
     const updatecontent = async () => {
-        contents = await (await fetch("/api/db/get")).json() as Array<Content>;
+        contents = await (await fetch("/api/db/get")).json() satisfies Array<Content>;
         content_devided_by_date = ContentUtils.devideByDate(contents);
         loaded = true;
     };
@@ -66,13 +44,13 @@
 
     const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
 
-    let vinfo_content = content_init;
+    let vinfo_content = new Content(new ContentDBTable(new ContentDraft()));
     const openvinfo = (_c: Content) => {
         vinfo_content = _c;
         vinfo.showModal();
     };
 
-    let acontent = content_table_init;
+    let acontent = new ContentDraft();
     let available = ContentUtils.isAvailable(acontent);
     $: available = ContentUtils.isAvailable(acontent);
 
@@ -80,9 +58,9 @@
         sending.showModal();
         let res: Array<Content> = await (await fetch("/api/db/new", {
             method: "POST",
-            body: JSON.stringify(acontent)
+            body: JSON.stringify(new ContentDBTable(acontent))
         })).json();
-        acontent = content_table_init;
+        acontent = new ContentDraft();
         contents = res ? res : contents;
         content_devided_by_date = ContentUtils.devideByDate(contents);
         sending.close();

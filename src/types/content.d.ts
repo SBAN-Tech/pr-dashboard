@@ -1,5 +1,6 @@
 import conf from "~/src/config.toml";
 import { DateUtils } from "$lib/date";
+import type { ulid } from "ulidx";
 
 declare class ContentCore {
     title: string;
@@ -32,12 +33,15 @@ class ContentDraft extends ContentCore {
 declare class ContentDBTable extends ContentCore {
     id: string | null;
     time: string;
+    approved: boolean;
     constructor(data: ContentDraft | Content);
 }
 
 class ContentDBTable extends ContentCore {
+    key = null;
     id = null;
     time = DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end));
+    approved = false;
     constructor(data: ContentDraft) {
         let u = new URL(data.url);
         let id: string | null;
@@ -54,7 +58,12 @@ class ContentDBTable extends ContentCore {
         } else {
             id = null;
         }
-        this = {...data, id} satisfies ContentDBTable;
+        this = {
+            ...data,
+            key: ulid(),
+            id,
+            approved: false
+        } satisfies ContentDBTable;
     }
     constructor(data: Content) {
         this = {
@@ -66,15 +75,22 @@ class ContentDBTable extends ContentCore {
 
 declare class Content extends ContentCore {
     key: string;
+    id: string | null;
     time: Date;
+    approved: boolean;
     constructor(data: ContentDBTable);
 }
 
 class Content extends ContentCore {
+    key = "";
+    id = null;
+    time = DateUtils.defaultDate(conf.start, conf.end);
+    approved = false;
     constructor(data: ContentDBTable) {
         this = {
             ...data,
-            time = new Date(data.time)
+            time: new Date(data.time),
+            approved: false
         }
     }
 }

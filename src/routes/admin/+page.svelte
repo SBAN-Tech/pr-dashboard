@@ -8,6 +8,7 @@
 	import { browser } from '$app/environment';
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '~/src/lib/date';
+    import {ContentDBTable, ContentDraft, Content} from "~/src/types/content";
 
     let editdialog: HTMLDialogElement;
     let updating: HTMLDialogElement;
@@ -17,19 +18,6 @@
 
     let ok = false;
     let loaded = false;
-
-    const content_table_init: ContentDBTable = {
-        id: null,
-        title: "",
-        url: "",
-        author: "",
-        category: "",
-        description: "",
-        time: DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end)),
-        duration: 0,
-        countdown: 2,
-        approved: false
-    };
 
     let contents: Array<Content> = [];
     let content_devided_by_date = ContentUtils.devideByDate(contents);
@@ -61,9 +49,9 @@
                 searching = true;
                 scontents = contents.filter((c) => c.author.includes(sparam));
                 break;
-            case "url":
+            case "id":
                 searching = true;
-                scontents = contents.filter((c) => c.url?.includes(sparam));
+                scontents = contents.filter((c) => c.id?.includes(sparam));
                 break;
             default:
                 searching = false;
@@ -76,7 +64,7 @@
         scontents = filteringnotapproved ? scontents.filter((c) => !c.approved) : scontents;
     }
 
-    let editing = content_table_init;
+    let editing = new ContentDBTable(new ContentDraft());
     let editing_key = "";
     let available = ContentUtils.isAvailable(editing);
     $: available = ContentUtils.isAvailable(editing);
@@ -85,7 +73,6 @@
         editing = {
             id: econtent.id,
             title: econtent.title,
-            url: econtent.url,
             author: econtent.author,
             category: econtent.category,
             description: econtent.description,
@@ -102,7 +89,7 @@
             method: "POST",
             body: JSON.stringify({
                 ...editing,
-                key: editing_key,
+                key: editing_key
             })
         })).json();
         contents = res ? res : contents;
@@ -122,7 +109,7 @@
         removed.showModal();
     };
     const postupdate = () => {
-        editing = content_table_init;
+        editing = new ContentDBTable(new ContentDraft());
         content_devided_by_date = ContentUtils.devideByDate(contents);
         if (searching) {
             search();
@@ -296,6 +283,7 @@
             filteringnotapproved = wfilteringnotapproved;
             filternotapproved();
             content_devided_by_date = ContentUtils.devideByDate(scontents);
+            searchdialog.close();
         }}>検索</button>
     </div>
 </dialog>
