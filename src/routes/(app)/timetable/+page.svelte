@@ -42,8 +42,6 @@
         }
     });
 
-    const duration = (_d: number, _c: number) => `${Math.floor(_d / 60) + _c}:${((_d % 60) + "").padStart(2, "0")}`;
-
     let vinfo_content = new Content(new ContentDBTable(new ContentDraft()));
     const openvinfo = (_c: Content) => {
         vinfo_content = _c;
@@ -114,7 +112,7 @@
                     <div class="pr_timetable_content pointer-events-auto">
                         <div class="flex flex-col gap-1 z-0" style={`opacity: ${content.approved ? 1 : 0.5};`}>
                             <p>{DateUtils.getTime(content.time)}</p>
-                            <p class="text-xs text-right">({duration(content.duration, content.countdown)})</p>
+                            <p class="text-xs text-right">({DateUtils.getDuration(content.duration, content.countdown)})</p>
                         </div>
                         <div class="flex flex-col gap-1 flex-1">
                             <p>{(new BXParser(jaModel)).parse(content.title).join("\u200B")}</p>
@@ -176,11 +174,11 @@
                     </tr>
                     <tr>
                         <th>動画の長さ</th>
-                        <td>{duration(vinfo_content.duration, 0)}</td>
+                        <td>{DateUtils.getDuration(vinfo_content.duration, 0)}</td>
                     </tr>
                     <tr>
                         <th>カウントダウンの長さ</th>
-                        <td>{duration(0, vinfo_content.countdown)}</td>
+                        <td>{DateUtils.getDuration(0, vinfo_content.countdown)}</td>
                     </tr>
                 </tbody>
             </table>

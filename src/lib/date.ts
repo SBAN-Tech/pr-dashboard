@@ -18,4 +18,12 @@ export namespace DateUtils {
     export const getCalendarDate = (time: Date) => DateTime.fromJSDate(new Date(time)).setZone(conf.timezone).toFormat("M/d");
     export const getTime = (time: Date) => DateTime.fromJSDate(new Date(time)).setZone(conf.timezone).toFormat("HH:mm");
     const addGuerrilla = (time: Date) => DateTime.fromJSDate(new Date(time)).plus({minutes: conf.guerrilla ?? 0}).toJSDate();
+    export const getDuration = (d: number, c: number) => {
+        let s = d + c * 60;
+        if (s < 3600) {
+            return `${Math.floor(s / 60)}:${((s % 60) + "").padStart(2, "0")}`;
+        } else {
+            return `${Math.floor(s / 3600)}:${(Math.floor(s / 60) % 60 + "").padStart(2, "0")}:${((s % 60) + "").padStart(2, "0")}`;
+        }
+    };
 }
