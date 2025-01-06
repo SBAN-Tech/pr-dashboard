@@ -3,7 +3,7 @@ import db from "$lib/db";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
 import { ContentUtils } from "$lib/content";
-import { ContentDBTable } from "~/src/types/content";
+import { ContentDBTable } from "~/src/types/content.d";
 
 export const POST: RequestHandler = async ({platform, request}) => {
     if (new Date() <= conf.limit) {

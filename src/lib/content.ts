@@ -1,6 +1,6 @@
 import conf from "~/src/config.toml";
 import { DateUtils } from "./date";
-import { Content, ContentDraft, ContentDBTable, type ContentDividedbyDate } from "../types/content";
+import { Content, ContentDraft, ContentDBTable, type ContentDividedbyDate } from "~/src/types/content.d";
 
 class Available {
     time: boolean = false;

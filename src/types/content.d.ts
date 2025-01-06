@@ -11,7 +11,7 @@ declare class ContentCore {
     countdown: number;
 }
 
-class ContentCore {
+export class ContentCore {
     title = "";
     author = "";
     category = "";
@@ -25,7 +25,7 @@ declare class ContentDraft extends ContentCore {
     time: string;
 }
 
-class ContentDraft extends ContentCore {
+export class ContentDraft extends ContentCore {
     url = "";
     time = DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end));
 }
@@ -34,41 +34,42 @@ declare class ContentDBTable extends ContentCore {
     id: string | null;
     time: string;
     approved: boolean;
-    constructor(data: ContentDraft | Content);
+    constructor(data: Content | ContentDraft);
 }
 
-class ContentDBTable extends ContentCore {
+export class ContentDBTable extends ContentCore {
     key = null;
     id = null;
     time = DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end));
     approved = false;
-    constructor(data: ContentDraft) {
-        let u = new URL(data.url);
-        let id: string | null;
-        let firstPath = url.pathname.split("/")[1];
-        if (u.hostname == "youtu.be") {
-            id = firstPath;
-        } else if(u.hostname == "youtube.com" || url.hostname == "www.youtube.com") {
-            if (firstPath == "watch") {    
-                let params = u.searchParams;
-                id = params.get("v");
+    constructor(data: Content | ContentDraft) {
+        if (data instanceof Content) {
+            return {
+                ...data,
+                time: DateUtils.toISO(data.time)
+            } satisfies ContentDBTable;
+        } else {
+            let u = new URL(data.url);
+            let id: string | null;
+            let firstPath = url.pathname.split("/")[1];
+            if (u.hostname == "youtu.be") {
+                id = firstPath;
+            } else if(u.hostname == "youtube.com" || url.hostname == "www.youtube.com") {
+                if (firstPath == "watch") {    
+                    let params = u.searchParams;
+                    id = params.get("v");
+                } else {
+                    id = null;
+                }
             } else {
                 id = null;
             }
-        } else {
-            id = null;
-        }
-        this = {
-            ...data,
-            key: ulid(),
-            id,
-            approved: false
-        } satisfies ContentDBTable;
-    }
-    constructor(data: Content) {
-        this = {
-            ...data,
-            time: DateUtils.toISO(data.time)
+            return {
+                ...data,
+                key: ulid(),
+                id,
+                approved: false
+            } satisfies ContentDBTable;
         }
     }
 }
@@ -81,17 +82,17 @@ declare class Content extends ContentCore {
     constructor(data: ContentDBTable);
 }
 
-class Content extends ContentCore {
+export class Content extends ContentCore {
     key = "";
     id = null;
     time = DateUtils.defaultDate(conf.start, conf.end);
     approved = false;
     constructor(data: ContentDBTable) {
-        this = {
+        return {
             ...data,
             time: new Date(data.time),
             approved: false
-        }
+        };
     }
 }
 

@@ -2,7 +2,7 @@ import { contents } from "~/src/db/schema";
 import type { D1Database } from "@cloudflare/workers-types";
 import { drizzle } from "drizzle-orm/d1";
 import { eq } from "drizzle-orm";
-import {Content, ContentDBTable, ContentDraft} from "~/src/types/content";
+import {Content, ContentDBTable} from "~/src/types/content.d";
 
 const get = async (db: D1Database | undefined) => {
     if (!db) {

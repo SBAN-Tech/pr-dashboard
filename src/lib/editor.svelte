@@ -2,7 +2,7 @@
     import conf from "~/src/config.toml";
     import Duration from '$lib/duration.svelte';
     import Datetime from '$lib/datetime.svelte';
-    import {ContentDBTable, type ContentDraft} from "~/src/types/content";
+    import {ContentDBTable, type ContentDraft} from "~/src/types/content.d";
     import { DateTime } from "luxon";
     export let content: ContentDraft | ContentDBTable;
 
