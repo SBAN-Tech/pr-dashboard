@@ -43,6 +43,7 @@ export class ContentDBTable extends ContentCore {
     time = DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end));
     approved = false;
     constructor(data: Content | ContentDraft) {
+        super();
         if (data instanceof Content) {
             return {
                 ...data,
@@ -88,6 +89,7 @@ export class Content extends ContentCore {
     time = DateUtils.defaultDate(conf.start, conf.end);
     approved = false;
     constructor(data: ContentDBTable) {
+        super();
         return {
             ...data,
             time: new Date(data.time),
