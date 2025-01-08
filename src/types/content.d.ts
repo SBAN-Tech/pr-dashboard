@@ -31,6 +31,7 @@ export class ContentDraft extends ContentCore {
 }
 
 declare class ContentDBTable extends ContentCore {
+    key: string;
     id: string | null;
     time: string;
     approved: boolean;
@@ -38,7 +39,7 @@ declare class ContentDBTable extends ContentCore {
 }
 
 export class ContentDBTable extends ContentCore {
-    key = null;
+    key = "";
     id = null;
     time = DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end));
     approved = false;
