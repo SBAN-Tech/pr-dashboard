@@ -74,6 +74,11 @@
 
 <main>
     <div class="m-0 flex flex-col w-full">
+        {#if new Date() < conf.limit}
+        <button on:click={() => addcontent.showModal()}>タイムテーブル登録</button>
+        {:else}
+        <button disabled>登録受付は終了しました。</button>
+        {/if}
         {#if !loaded}
             <p>Loading...</p>
         {:else if content_devided_by_date.length <= 0}
@@ -139,9 +144,11 @@
         {/each}
     </div>
 
+    <!--
     <button title="登録" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4 z-20" on:click={() => addcontent.showModal()} disabled={(new Date() > conf.limit)}>
         <Icon icon="heroicons:plus-solid" />
     </button>
+    -->
 </main>
 
 <dialog bind:this={vinfo}>
