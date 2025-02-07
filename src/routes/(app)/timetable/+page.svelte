@@ -74,11 +74,9 @@
 
 <main>
     <div class="m-0 flex flex-col w-full">
-        {#if new Date() < conf.limit}
-        <button on:click={() => addcontent.showModal()}>タイムテーブル登録</button>
-        {:else}
-        <button disabled>登録受付は終了しました。</button>
-        {/if}
+        <button on:click={() => addcontent.showModal()} disabled={new Date() > conf.limit}>
+        {#if new Date() < conf.limit} タイムテーブル登録 {:else} 登録受付は終了しました。 {/if}
+        </button>
         {#if !loaded}
             <p>Loading...</p>
         {:else if content_devided_by_date.length <= 0}
