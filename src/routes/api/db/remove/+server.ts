@@ -5,7 +5,6 @@ import { isloginable } from "$lib/server/isloginable";
 
 interface Data {
     key: string,
-    secret: string;
 };
 
 export const POST: RequestHandler = async ({locals, platform, request}) => {

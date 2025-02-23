@@ -12,7 +12,6 @@
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '$lib/date';
     import { Content, ContentDBTable, ContentDraft } from "~/src/types/content.d";
-	import { DB } from '$lib/db';
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
@@ -26,7 +25,7 @@
     let content_devided_by_date = ContentUtils.devideByDate(contents);
 
     const updatecontent = async () => {
-        contents = await DB.get();
+        contents = await (await fetch("/api/db/get")).json() satisfies Array<Content>;
         content_devided_by_date = ContentUtils.devideByDate(contents);
         loaded = true;
     };
@@ -55,7 +54,10 @@
 
     const send = async () => {
         sending.showModal();
-        let res = await DB.insert(acontent);
+        let res = await (await fetch("/api/db/insert", {
+            method: "POST",
+            body: JSON.stringify(new ContentDBTable(acontent))
+        })).json() satisfies Array<Content>;
         acontent = new ContentDraft();
         contents = res ? res : contents;
         content_devided_by_date = ContentUtils.devideByDate(contents);

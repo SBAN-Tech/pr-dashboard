@@ -3,8 +3,6 @@
     import { DateTime } from 'luxon';
     import { DateUtils } from '$lib/date';
 
-    let first: HTMLInputElement;
-
     export let value: string;
     let v = [DateUtils.getDate(new Date(value)), DateUtils.getTime(new Date(value))];
     $: v = [DateUtils.getDate(new Date(value)), DateUtils.getTime(new Date(value))];
@@ -26,5 +24,5 @@
         {/each}
     </select>
 
-    <input type="time" step={60} on:input={oninput} bind:value={v[1]} class="col-span-2">
+    <input type="time" step={60} on:change={oninput} bind:value={v[1]} class="col-span-2">
 </div>

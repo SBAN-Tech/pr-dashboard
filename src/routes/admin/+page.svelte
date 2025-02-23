@@ -8,7 +8,6 @@
 	import { browser } from '$app/environment';
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '$lib/date';
-    import { DB } from '$lib/db';
     import { ContentDBTable, ContentDraft, Content } from "~/src/types/content.d";
 
     let editdialog: HTMLDialogElement;
@@ -23,7 +22,7 @@
     let contents: Array<Content> = [];
     let content_devided_by_date = ContentUtils.devideByDate(contents);
     const updatecontent = async () => {
-        contents = await DB.get();
+        contents = await (await fetch("/api/db/get")).json() satisfies Array<Content>;
         content_devided_by_date = ContentUtils.devideByDate(contents);
         search();
         filternotapproved();
@@ -72,14 +71,20 @@
     };
     const update = async () => {
         updating.showModal();
-        let res = await DB.update(editing);
+        let res = await (await fetch("/api/db/update", {
+            method: "POST",
+            body: JSON.stringify(editing)
+        })).json() satisfies Array<Content>;
         contents = res ? res : contents;
         postupdate();
         updated.showModal();
     };
     const remove = async () => {
         updating.showModal();
-        let res = await DB.remove(editing_key);
+        let res = await (await fetch("/api/db/remove", {
+            method: "POST",
+            body: JSON.stringify({ key: editing_key })
+        })).json() satisfies Array<Content>;
         contents = res ? res : contents;
         postupdate();
         removed.showModal();
