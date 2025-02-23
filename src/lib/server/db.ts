@@ -17,7 +17,7 @@ const insert = async (db: D1Database | undefined, table: ContentDBTable) => {
         throw Error("Cannot find database.");
     }
     const d1database = drizzle(db);
-    await d1database.insert(contents).values(Object.assign(table)).execute();
+    await d1database.insert(contents).values(Object.assign({...table})).execute();
     return await get(db);
 }
 
@@ -26,7 +26,7 @@ const update = async (db: D1Database | undefined, key: string, patch: Partial<Co
         throw Error("Cannot find database.");
     }
     const d1database = drizzle(db);
-    await d1database.update(contents).set(patch).where(eq(contents.key, key)).execute();
+    await d1database.update(contents).set({...patch}).where(eq(contents.key, key)).execute();
     return await get(db);
 }
 

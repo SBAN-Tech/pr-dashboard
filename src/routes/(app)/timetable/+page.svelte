@@ -13,16 +13,16 @@
 	import { DateUtils } from '$lib/date';
     import { Content, ContentDBTable, ContentDraft } from "~/src/types/content.d";
 
-    let vinfo: HTMLDialogElement;
-    let addcontent: HTMLDialogElement;
-    let sending: HTMLDialogElement;
-    let sent: HTMLDialogElement;
+    let vinfo: HTMLDialogElement = $state();
+    let addcontent: HTMLDialogElement = $state();
+    let sending: HTMLDialogElement = $state();
+    let sent: HTMLDialogElement = $state();
 
-    let loaded = false;
+    let loaded = $state(false);
     
     let contents: Array<Content> = [];
     
-    let content_devided_by_date = ContentUtils.devideByDate(contents);
+    let content_devided_by_date = $state(ContentUtils.devideByDate(contents));
 
     const updatecontent = async () => {
         contents = await (await fetch("/api/db/get")).json() satisfies Array<Content>;
@@ -42,15 +42,14 @@
         }
     });
 
-    let vinfo_content = new Content(new ContentDBTable(new ContentDraft()));
+    let vinfo_content = $state(new Content(new ContentDBTable(new ContentDraft())));
     const openvinfo = (_c: Content) => {
         vinfo_content = _c;
         vinfo.showModal();
     };
 
-    let acontent = new ContentDraft();
-    let available = ContentUtils.isAvailable(acontent);
-    $: available = ContentUtils.isAvailable(acontent);
+    let acontent = $state(new ContentDraft());
+    let available = $derived(ContentUtils.isAvailable(acontent));
 
     const send = async () => {
         sending.showModal();
@@ -74,7 +73,7 @@
 
 <main>
     <div class="m-0 flex flex-col w-full">
-        <button on:click={() => addcontent.showModal()} disabled={new Date() > conf.limit}>
+        <button onclick={() => addcontent.showModal()} disabled={new Date() > conf.limit}>
             {#if new Date() < conf.limit}タイムテーブル登録{:else}登録受付は終了しました。{/if}
         </button>
         {#if !loaded}
@@ -132,7 +131,7 @@
                                     </button>
                                 </a>
                             {/if}
-                            <button title="詳細" class="pr_icon_button" on:click={() => openvinfo(content)} disabled={!content.approved}>
+                            <button title="詳細" class="pr_icon_button" onclick={() => openvinfo(content)} disabled={!content.approved}>
                                 <Icon icon="heroicons:information-circle-solid" />
                             </button>
                         </div>
@@ -144,7 +143,7 @@
 </main>
 
 <dialog bind:this={vinfo}>
-    <button title="閉じる" class="pr_dialog_close" on:click={() => vinfo.close()}>
+    <button title="閉じる" class="pr_dialog_close" onclick={() => vinfo.close()}>
         <Icon icon="heroicons:x-mark-solid" />
     </button>
     <h2 class="text-center mb-4">{(new BXParser(jaModel)).parse(vinfo_content.title).join("\u200B")}</h2>
@@ -186,7 +185,7 @@
 </dialog>
 
 <dialog bind:this={addcontent} class="text-left">
-    <button title="閉じる" class="pr_dialog_close" on:click={() => addcontent.close()}>
+    <button title="閉じる" class="pr_dialog_close" onclick={() => addcontent.close()}>
         <Icon icon="heroicons:x-mark-solid" />
     </button>
     <div class="w-10/12 mx-auto">
@@ -194,7 +193,7 @@
         {#if !available.time}
             <p class="text-red-600 dark:text-red-500">設定された日時は開催期間外です。</p>
         {/if}
-        <button type="submit" on:click={send} disabled={Object.values(available).includes(false)}>登録</button>
+        <button type="submit" onclick={send} disabled={Object.values(available).includes(false)}>登録</button>
     </div>
 </dialog>
 
@@ -208,6 +207,6 @@
     <div class="flex flex-col gap-2">
         <h2 class="text-center">登録完了</h2>
         <p>タイムテーブルへの<wbr>登録が完了しました。</p>
-        <button on:click={() => {sent.close();addcontent.close()}}>閉じる</button>
+        <button onclick={() => {sent.close();addcontent.close()}}>閉じる</button>
     </div>
 </dialog>

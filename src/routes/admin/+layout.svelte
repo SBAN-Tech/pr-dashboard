@@ -2,6 +2,11 @@
     import { page } from "$app/stores";
     import Icon from '@iconify/svelte';
     import { signIn, signOut } from "@auth/sveltekit/client";
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
 </script>
 
 <header>
@@ -12,11 +17,11 @@
     </a>
     <p class="text-xl">ダッシュボード</p>
     {#if $page.data.session?.user}
-        <button title="ログアウト" class="pr_icon_button text-xl ml-auto" on:click={() => signOut()}>
+        <button title="ログアウト" class="pr_icon_button text-xl ml-auto" onclick={() => signOut()}>
             <Icon icon="heroicons:arrow-left-start-on-rectangle-solid" />
         </button>
     {:else}
-        <button title="ログイン" class="pr_icon_button text-xl ml-auto" on:click={() => signIn()}>
+        <button title="ログイン" class="pr_icon_button text-xl ml-auto" onclick={() => signIn()}>
             <Icon icon="heroicons:arrow-left-end-on-rectangle-solid" />
         </button>
     {/if}
@@ -24,5 +29,5 @@
 </header>
 
 <div class="content">
-    <slot />
+    {@render children?.()}
 </div>

@@ -1,6 +1,11 @@
 <script lang="ts">
     import conf from '~/src/config.toml';
     import Icon from '@iconify/svelte';
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
 
     interface Pages {
         name: string;
@@ -26,8 +31,8 @@
         }
     ];
 
-    let hamburger: HTMLDivElement;
-    let wrapper: HTMLDivElement;
+    let hamburger: HTMLDivElement = $state();
+    let wrapper: HTMLDivElement = $state();
 
     const hamburger_o = () => {
         hamburger.classList.add("hamburger-open");
@@ -41,7 +46,7 @@
 </script>
 
 <header>
-    <button title="メニュー" class="pr_icon_button text-xl sm:hidden" on:click={() => hamburger_o()}>
+    <button title="メニュー" class="pr_icon_button text-xl sm:hidden" onclick={() => hamburger_o()}>
         <Icon icon="heroicons:bars-3-solid" />
     </button>
     <p class="grow"><a href="/">{conf.title}</a></p>
@@ -53,7 +58,7 @@
 </header>
 
 <div class="content">
-    <slot />
+    {@render children?.()}
 </div>
 
 <footer>
@@ -67,12 +72,12 @@
 
 <div id="hamburger" bind:this={hamburger}>
     <div id="menu">
-        <button title="閉じる" class="pr_dialog_close" on:click={() => hamburger_c()}>
+        <button title="閉じる" class="pr_dialog_close" onclick={() => hamburger_c()}>
             <Icon icon="heroicons:x-mark-solid" />
         </button>
         <ul class="flex flex-col text-base pt-8 -mx-4">
             {#each pages as p}
-                <a href={p.path} on:click={() => hamburger_c()}><li id="hamburger-item">{p.name}</li></a>
+                <a href={p.path} onclick={() => hamburger_c()}><li id="hamburger-item">{p.name}</li></a>
             {/each}
         </ul>
     </div>

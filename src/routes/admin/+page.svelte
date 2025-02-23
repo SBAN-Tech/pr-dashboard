@@ -10,17 +10,17 @@
 	import { DateUtils } from '$lib/date';
     import { ContentDBTable, ContentDraft, Content } from "~/src/types/content.d";
 
-    let editdialog: HTMLDialogElement;
-    let updating: HTMLDialogElement;
-    let updated: HTMLDialogElement;
-    let removed: HTMLDialogElement;
-    let searchdialog: HTMLDialogElement;
+    let editdialog: HTMLDialogElement = $state();
+    let updating: HTMLDialogElement = $state();
+    let updated: HTMLDialogElement = $state();
+    let removed: HTMLDialogElement = $state();
+    let searchdialog: HTMLDialogElement = $state();
 
-    let ok = false;
-    let loaded = false;
+    let ok = $state(false);
+    let loaded = $state(false);
 
     let contents: Array<Content> = [];
-    let content_devided_by_date = ContentUtils.devideByDate(contents);
+    let content_devided_by_date = $state(ContentUtils.devideByDate(contents));
     const updatecontent = async () => {
         contents = await (await fetch("/api/db/get")).json() satisfies Array<Content>;
         content_devided_by_date = ContentUtils.devideByDate(contents);
@@ -29,12 +29,11 @@
         loaded = true;
     };
 
-    let searching = false;
-    let wfilteringnotapproved = false;
-    let filteringnotapproved = false;
-    let slabel = "none";
-    let sparam = "";
-    let scontents = contents;
+    let wfilteringnotapproved = $state(false);
+    let filteringnotapproved = $state(false);
+    let slabel = $state("none");
+    let sparam = $state("");
+    let scontents = $state(contents);
     const search = () => {
         switch (slabel) {
             case "title":
@@ -60,10 +59,9 @@
         scontents = filteringnotapproved ? scontents.filter((c) => !c.approved) : scontents;
     }
 
-    let editing = new ContentDBTable(new ContentDraft());
+    let editing = $state(new ContentDBTable(new ContentDraft()));
     let editing_key = "";
-    let available = ContentUtils.isAvailable(editing);
-    $: available = ContentUtils.isAvailable(editing);
+    let available = $derived(ContentUtils.isAvailable(editing));
     const edit = (econtent: Content) => {
         editing_key = econtent.key;
         editing = new ContentDBTable(econtent);
@@ -173,7 +171,7 @@
                                     </p>
                                 </div>
                                 <div class="flex flex-row gap-1 ml-auto items-center text-xl">
-                                    <button title="編集" class="pr_icon_button" on:click={() => edit(content)}>
+                                    <button title="編集" class="pr_icon_button" onclick={() => edit(content)}>
                                         <Icon icon="heroicons:pencil-solid" />
                                     </button>
                                 </div>
@@ -182,7 +180,7 @@
                     </div>
                 {/each}
             </div>
-            <button title="検索" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4 z-20" on:click={() => searchdialog.showModal()}>
+            <button title="検索" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4 z-20" onclick={() => searchdialog.showModal()}>
                 <Icon icon="heroicons:magnifying-glass-solid" />
             </button>
         {:else}
@@ -194,7 +192,7 @@
 </main>
 
 <dialog bind:this={editdialog} class="text-left">
-    <button title="閉じる" class="pr_dialog_close" on:click={() => editdialog.close()}>
+    <button title="閉じる" class="pr_dialog_close" onclick={() => editdialog.close()}>
         <Icon icon="heroicons:x-mark-solid" />
     </button>
     <div class="w-10/12 mx-auto">
@@ -207,8 +205,8 @@
             <p class="text-red-600 dark:text-red-500">設定された日時は対象期間外です。</p>
         {/if}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
-            <button class="order-2" on:click={update} disabled={Object.values(available).includes(false)}>変更</button>
-            <button class="order-3 sm:order-1 pr_white_button" on:click={remove}>削除</button>
+            <button class="order-2" onclick={update} disabled={Object.values(available).includes(false)}>変更</button>
+            <button class="order-3 sm:order-1 pr_white_button" onclick={remove}>削除</button>
         </div>
     </div>
 </dialog>
@@ -223,7 +221,7 @@
     <div class="flex flex-col gap-2">
         <h2 class="text-center">更新完了</h2>
         <p>更新が完了しました。</p>
-        <button on:click={() => {updated.close();editdialog.close()}}>閉じる</button>
+        <button onclick={() => {updated.close();editdialog.close()}}>閉じる</button>
     </div>
 </dialog>
 
@@ -231,12 +229,12 @@
     <div class="flex flex-col gap-2">
         <h2 class="text-center">削除完了</h2>
         <p>削除が完了しました。</p>
-        <button on:click={() => {removed.close();editdialog.close()}}>閉じる</button>
+        <button onclick={() => {removed.close();editdialog.close()}}>閉じる</button>
     </div>
 </dialog>
 
 <dialog bind:this={searchdialog} class="sm:h-fit sm:w-fit w-full h-full text-left">
-    <button title="閉じる" class="pr_dialog_close" on:click={() => searchdialog.close()}>
+    <button title="閉じる" class="pr_dialog_close" onclick={() => searchdialog.close()}>
         <Icon icon="heroicons:x-mark-solid" />
     </button>
     <div class="py-4 sm:px-6 w-10/12 sm:w-fit mx-auto">
@@ -253,7 +251,7 @@
             <input type="checkbox" bind:checked={wfilteringnotapproved} />
             <span>非承認のみ表示</span>
         </label>
-        <button on:click={() => {
+        <button onclick={() => {
             search();
             filteringnotapproved = wfilteringnotapproved;
             filternotapproved();

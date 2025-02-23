@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({platform, request}) => {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        "content": `#${conf.title}\n${time[1]}/${time[2]} ${time[3]}:${time[4]}より${data.author}さんによる「${data.title}」のプレミアが5分後に始まります!\n${conf.list ? (data.id ? `https://youtu.be/${data.id}?list=${conf.list}` : "") : `https://youtu.be/${data.id}`}`,
+                        "content": `#${conf.title}_予告\n${time[1]}/${time[2]} ${time[3]}:${time[4]}より${data.author}さんによる「${data.title}」のプレミアが5分後に始まります!\n${conf.list ? (data.id ? `https://youtu.be/${data.id}?list=${conf.list}` : "") : `https://youtu.be/${data.id}`}`,
                     })
                 });
             }

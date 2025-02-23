@@ -1,5 +1,8 @@
 <script lang="ts">
-    export let title: string;
+    interface Props {
+        title: string;
+    }
+    let { title }: Props = $props();
 </script>
 
 <h1 class="text-center mt-4">{title}</h1>

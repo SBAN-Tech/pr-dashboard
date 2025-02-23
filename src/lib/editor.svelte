@@ -1,13 +1,20 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
     import conf from "~/src/config.toml";
     import Duration from '$lib/duration.svelte';
     import Datetime from '$lib/datetime.svelte';
     import {ContentDBTable, type ContentDraft} from "~/src/types/content.d";
     import { DateTime } from "luxon";
-    export let content: ContentDraft | ContentDBTable;
+    interface Props {
+        content: ContentDraft | ContentDBTable;
+    }
 
-    let isevent = (conf.category.event) ? content.category == conf.category.event : false;
-    $: isevent = (conf.category.event) ? content.category == conf.category.event : false;
+    let { content = $bindable() }: Props = $props();
+
+    let isevent = $state((conf.category.event) ? content.category == conf.category.event : false);
+    run(() => {
+        isevent = (conf.category.event) ? content.category == conf.category.event : false;
+    });
 </script>
 
 <h3>タイトル</h3>

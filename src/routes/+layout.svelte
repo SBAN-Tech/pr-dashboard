@@ -8,6 +8,11 @@
     import '@fontsource-variable/noto-sans-jp';
     import '@fontsource/shippori-mincho';
     import '@fontsource-variable/jetbrains-mono';
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
 </script>
 
 <svelte:head>
@@ -17,4 +22,4 @@
 
 <svelte:body use:style={styles} />
 
-<slot />
+{@render children?.()}
