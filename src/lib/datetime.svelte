@@ -3,18 +3,17 @@
     import { DateTime } from 'luxon';
     import { DateUtils } from '$lib/date';
 
-    let first: HTMLInputElement;    
+    let first: HTMLInputElement;
 
     export let value: string;
-    let v = value.split(/T|\s|:|\+/).slice(0, 3);
-    $: v = value.split(/T|\s|:|\+/).slice(0, 3);
+    let v = [DateUtils.getDate(new Date(value)), DateUtils.getTime(new Date(value))];
+    $: v = [DateUtils.getDate(new Date(value)), DateUtils.getTime(new Date(value))];
 
     const onselect = () => {
-        value = `${v[0]}T${v[1]}:${v[2]}:00${DateTime.now().setZone(conf.timezone).toFormat("ZZ")}`;
+        value = `${v[0]}T${v[1]}:00${DateTime.now().setZone(conf.timezone).toFormat("ZZ")}`;
     }
-    const oninput = (i: number) => {
-        v[i] = `00${v[i]}`.replaceAll(/[^0-9]/g, '').slice(-2);
-        value = `${v[0]}T${v[1]}:${v[2]}:00${DateTime.now().setZone(conf.timezone).toFormat("ZZ")}`;
+    const oninput = () => {
+        value = `${v[0]}T${v[1]}:00${DateTime.now().setZone(conf.timezone).toFormat("ZZ")}`;
     }
 </script>
 
@@ -27,9 +26,5 @@
         {/each}
     </select>
 
-    <label class="flex flex-row gap-[0.15rem] col-span-2" id="duration" on:click={() => first.click()}>
-        <input type="text" pattern="[0-9][0-9]" class="ml-1" bind:this={first} bind:value={v[1]} on:input={() => oninput(1)} />
-        :
-        <input type="text" pattern="[0-9][0-9]" bind:value={v[2]} on:input={() => oninput(2)} />
-    </label>
+    <input type="time" step={60} on:input={oninput} bind:value={v[1]} class="col-span-2">
 </div>
