@@ -1,6 +1,6 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
-import { isloginable } from "$lib/isloginable";
+import { isloginable } from "$lib/server/isloginable";
 
 interface ReqBody {
     id?: string;

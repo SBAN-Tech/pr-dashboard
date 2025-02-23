@@ -1,5 +1,5 @@
 import conf from "~/src/config.toml";
-import db from "$lib/db";
+import db from "$lib/server/db";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
 import { ContentUtils } from "$lib/content";

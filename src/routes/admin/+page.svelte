@@ -7,8 +7,9 @@
     import { Parser as BXParser, jaModel } from "budoux";
 	import { browser } from '$app/environment';
 	import { ContentUtils } from '$lib/content';
-	import { DateUtils } from '~/src/lib/date';
-    import {ContentDBTable, ContentDraft, Content} from "~/src/types/content.d";
+	import { DateUtils } from '$lib/date';
+    import { DB } from '$lib/db';
+    import { ContentDBTable, ContentDraft, Content } from "~/src/types/content.d";
 
     let editdialog: HTMLDialogElement;
     let updating: HTMLDialogElement;
@@ -22,14 +23,10 @@
     let contents: Array<Content> = [];
     let content_devided_by_date = ContentUtils.devideByDate(contents);
     const updatecontent = async () => {
-        contents = await (await fetch("/api/db/get")).json() as Array<Content>;
+        contents = await DB.get();
         content_devided_by_date = ContentUtils.devideByDate(contents);
-        if (searching) {
-            search();
-        }
-        if (filteringnotapproved) {
-            filternotapproved();
-        }
+        search();
+        filternotapproved();
         loaded = true;
     };
 
@@ -70,40 +67,19 @@
     $: available = ContentUtils.isAvailable(editing);
     const edit = (econtent: Content) => {
         editing_key = econtent.key;
-        editing = {
-            id: econtent.id,
-            title: econtent.title,
-            author: econtent.author,
-            category: econtent.category,
-            description: econtent.description,
-            time: DateUtils.toISO(econtent.time),
-            duration: econtent.duration,
-            countdown: econtent.countdown,
-            approved: econtent.approved
-        };
+        editing = new ContentDBTable(econtent);
         editdialog.showModal();
     };
     const update = async () => {
         updating.showModal();
-        let res: Array<Content> = await (await fetch("/api/db/update", {
-            method: "POST",
-            body: JSON.stringify({
-                ...editing,
-                key: editing_key
-            })
-        })).json();
+        let res = await DB.update(editing);
         contents = res ? res : contents;
         postupdate();
         updated.showModal();
     };
     const remove = async () => {
         updating.showModal();
-        let res: Array<Content> = await (await fetch("/api/db/remove", {
-            method: "POST",
-            body: JSON.stringify({
-                key: editing_key,
-            })
-        })).json();
+        let res = await DB.remove(editing_key);
         contents = res ? res : contents;
         postupdate();
         removed.showModal();
@@ -111,12 +87,8 @@
     const postupdate = () => {
         editing = new ContentDBTable(new ContentDraft());
         content_devided_by_date = ContentUtils.devideByDate(contents);
-        if (searching) {
-            search();
-        }
-        if (filteringnotapproved) {
-            filternotapproved();
-        }
+        search();
+        filternotapproved();
         updating.close();
     }
 

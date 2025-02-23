@@ -11,7 +11,8 @@
     import { Parser as BXParser, jaModel } from "budoux";
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '$lib/date';
-    import {Content, ContentDBTable, ContentDraft} from "~/src/types/content.d";
+    import { Content, ContentDBTable, ContentDraft } from "~/src/types/content.d";
+	import { DB } from '$lib/db';
 
     let vinfo: HTMLDialogElement;
     let addcontent: HTMLDialogElement;
@@ -25,7 +26,7 @@
     let content_devided_by_date = ContentUtils.devideByDate(contents);
 
     const updatecontent = async () => {
-        contents = await (await fetch("/api/db/get")).json() satisfies Array<Content>;
+        contents = await DB.get();
         content_devided_by_date = ContentUtils.devideByDate(contents);
         loaded = true;
     };
@@ -54,10 +55,7 @@
 
     const send = async () => {
         sending.showModal();
-        let res: Array<Content> = await (await fetch("/api/db/new", {
-            method: "POST",
-            body: JSON.stringify(new ContentDBTable(acontent))
-        })).json();
+        let res = await DB.insert(acontent);
         acontent = new ContentDraft();
         contents = res ? res : contents;
         content_devided_by_date = ContentUtils.devideByDate(contents);
@@ -75,7 +73,7 @@
 <main>
     <div class="m-0 flex flex-col w-full">
         <button on:click={() => addcontent.showModal()} disabled={new Date() > conf.limit}>
-        {#if new Date() < conf.limit} タイムテーブル登録 {:else} 登録受付は終了しました。 {/if}
+            {#if new Date() < conf.limit}タイムテーブル登録{:else}登録受付は終了しました。{/if}
         </button>
         {#if !loaded}
             <p>Loading...</p>

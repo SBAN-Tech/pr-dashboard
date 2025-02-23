@@ -1,7 +1,7 @@
-import db from "$lib/db";
+import db from "$lib/server/db";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
-import { isloginable } from "~/src/lib/isloginable";
+import { isloginable } from "$lib/server/isloginable";
 
 interface Data {
     key: string,
