@@ -139,12 +139,6 @@
             </div>
         {/each}
     </div>
-
-    <!--
-    <button title="登録" class="rounded-full w-fit p-2 text-xl fixed bottom-4 right-4 z-20" on:click={() => addcontent.showModal()} disabled={(new Date() > conf.limit)}>
-        <Icon icon="heroicons:plus-solid" />
-    </button>
-    -->
 </main>
 
 <dialog bind:this={vinfo}>
@@ -196,7 +190,7 @@
     <div class="w-10/12 mx-auto">
         <Editor bind:content={acontent} />
         {#if !available.time}
-            <p class="text-red-600 dark:text-red-500">設定された日時は対象期間外です。</p>
+            <p class="text-red-600 dark:text-red-500">設定された日時は開催期間外です。</p>
         {/if}
         <button type="submit" on:click={send} disabled={Object.values(available).includes(false)}>登録</button>
     </div>

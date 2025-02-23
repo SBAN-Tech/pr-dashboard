@@ -1,4 +1,4 @@
-import { type Content, ContentDBTable, type ContentDraft } from "../types/content";
+import { Content, ContentDBTable, ContentDraft } from "~/src/types/content.d";
 
 export namespace DB {
     export const get = async () => await (await fetch("/api/db/get")).json() satisfies Array<Content>;

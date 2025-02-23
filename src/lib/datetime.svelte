@@ -20,7 +20,7 @@
 
 <div class="w-full grid grid-cols-3 gap-2">
     <select bind:value={v[0]} on:change={onselect} class="col-span-1">
-        {#each DateUtils.eachDays(DateUtils.defaultDate(conf.start, conf.end), conf.end, conf.timezone) as d}
+        {#each DateUtils.eachDays(DateUtils.defaultDate(conf.start, conf.end), conf.end) as d}
             <option value={d?.toFormat("yyyy-MM-dd")}>
                 {d?.toFormat("M/d")}
             </option>

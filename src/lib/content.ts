@@ -35,9 +35,9 @@ export namespace ContentUtils {
             let category = conf.category.partlist[index];
             let start = category.start ?? conf.start;
             let end = category.end ?? conf.end;
-            result.time = DateUtils.isAvailable(new Date(content.time), start, end);
+            result.time = DateUtils.isAvailable(new Date(content.time), content.countdown, content.duration, start, end, conf.unavailable);
         } else {
-            result.time = DateUtils.isAvailable(new Date(content.time), conf.start, conf.end);
+            result.time = DateUtils.isAvailable(new Date(content.time), content.countdown, content.duration, conf.start, conf.end, conf.unavalable);
         }
 
         return result;

@@ -2,12 +2,20 @@ import conf from "~/src/config.toml";
 import { DateTime, Interval } from "luxon";
 
 export namespace DateUtils {
-    export const eachDays = (start: Date, end: Date, zone?: string) => Interval
+    export const eachDays = (start: Date, end: Date) => Interval
         .fromDateTimes(
-            DateTime.fromJSDate(start, {zone}).startOf("day"),
-            DateTime.fromJSDate(end, {zone}).endOf("day")
+            DateTime.fromJSDate(start, {zone: conf.zone}).startOf("day"),
+            DateTime.fromJSDate(end, {zone: conf.zone}).endOf("day")
         ).splitBy({days: 1}).map(d => d.start);
-    export const isAvailable = (time: Date, start: Date, end: Date) => (start < addGuerrilla(time) && addGuerrilla(time) < end);
+    export const isAvailable = (time: Date, countdown: number, duration: number, start: Date, end: Date, unavailable?: Array<Unavailable>) => {
+        let content_i = Interval.fromDateTimes(
+            DateTime.fromJSDate(time, {zone: conf.zone}),
+            DateTime.fromJSDate(time, {zone: conf.zone}).plus({minutes: countdown, seconds: duration})
+        );
+        let term_i = Interval.fromDateTimes((addGuerrilla(new Date()) < start) ? start : (addGuerrilla(new Date()) < end) ? addGuerrilla(new Date()) : end, end);
+        let unavailable_i = unavailable ? unavailable.map((c) => Interval.fromDateTimes(c.start, c.end)) : [];
+        return (term_i.engulfs(content_i) && !unavailable_i.map((c) => c.overlaps(content_i)).includes(true));
+    };
     export const defaultDate = (start: Date, end: Date) => {
         let now = DateTime.now().plus({minutes: (conf.guerrilla ?? 0) + 10}).toJSDate();
         return (now < start) ? start : (end < now) ? end : now;

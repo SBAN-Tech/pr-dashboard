@@ -14,6 +14,7 @@ interface Config {
     end: Date;
     timezone: string;
     guerrilla?: number;
+    unavailable?: Array<Unavailable>;
     category: {
         list: Array<string>;
         event?: string;
@@ -23,6 +24,13 @@ interface Config {
             end?: Date;
         }>;
     };
+}
+
+interface Unavailable {
+    name: string;
+    start: Date;
+    end: Date;
+    // message?: string;
 }
 
 declare module '*.toml' {
