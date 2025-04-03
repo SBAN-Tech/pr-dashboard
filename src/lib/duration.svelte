@@ -1,7 +1,7 @@
 <script lang="ts">
     import { run } from 'svelte/legacy';
 
-    let first: HTMLInputElement = $state();    
+    let first: HTMLInputElement | undefined = $state();    
 
     interface Props {
         value: number;
@@ -20,7 +20,7 @@
     }
 </script>
 
-<label class="flex flex-row gap-[0.15rem]" id="duration" onclick={() => first.click()}>
+<label class="flex flex-row gap-[0.15rem]" id="duration" onclick={() => first?.click()}>
     {#if isevent}
         <input type="text" pattern="[0-9][0-9]" bind:this={first} bind:value={v[0]} oninput={() => oninput(0)} />
         h

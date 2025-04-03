@@ -10,11 +10,11 @@
 	import { DateUtils } from '$lib/date';
     import { ContentDBTable, ContentDraft, Content } from "~/src/types/content.d";
 
-    let editdialog: HTMLDialogElement = $state();
-    let updating: HTMLDialogElement = $state();
-    let updated: HTMLDialogElement = $state();
-    let removed: HTMLDialogElement = $state();
-    let searchdialog: HTMLDialogElement = $state();
+    let editdialog: HTMLDialogElement;
+    let updating: HTMLDialogElement;
+    let updated: HTMLDialogElement;
+    let removed: HTMLDialogElement;
+    let searchdialog: HTMLDialogElement;
 
     let ok = $state(false);
     let loaded = $state(false);
@@ -31,6 +31,7 @@
 
     let wfilteringnotapproved = $state(false);
     let filteringnotapproved = $state(false);
+    let searching = $state(false);
     let slabel = $state("none");
     let sparam = $state("");
     let scontents = $state(contents);
@@ -59,12 +60,12 @@
         scontents = filteringnotapproved ? scontents.filter((c) => !c.approved) : scontents;
     }
 
-    let editing = $state(new ContentDBTable(new ContentDraft()));
+    let editing = $state((new ContentDraft()).to_table());
     let editing_key = "";
     let available = $derived(ContentUtils.isAvailable(editing));
     const edit = (econtent: Content) => {
         editing_key = econtent.key;
-        editing = new ContentDBTable(econtent);
+        editing = econtent.to_table();
         editdialog.showModal();
     };
     const update = async () => {
@@ -88,7 +89,7 @@
         removed.showModal();
     };
     const postupdate = () => {
-        editing = new ContentDBTable(new ContentDraft());
+        editing = (new ContentDraft()).to_table();
         content_devided_by_date = ContentUtils.devideByDate(contents);
         search();
         filternotapproved();

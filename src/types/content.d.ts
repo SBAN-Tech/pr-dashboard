@@ -23,11 +23,27 @@ export class ContentCore {
 declare class ContentDraft extends ContentCore {
     url: string;
     time: string;
+    to_table(): ContentDBTable;
 }
 
 export class ContentDraft extends ContentCore {
     url = "";
     time = DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end));
+    to_table() {
+        let id: string | null;
+        let match = this.url.match(/(?<=\/|v=|^)([A-Za-z0-9_-]{11})(?=\?|&|$)/);
+        if (match) {
+            id = match[0];
+        } else {
+            id = null;
+        }
+        return {
+            ...this,
+            key: ulid(),
+            id,
+            approved: false
+        } satisfies ContentDBTable;
+    }
 }
 
 declare class ContentDBTable extends ContentCore {
@@ -35,7 +51,7 @@ declare class ContentDBTable extends ContentCore {
     id: string | null;
     time: string;
     approved: boolean;
-    constructor(data: Content | ContentDraft);
+    constructor();
 }
 
 export class ContentDBTable extends ContentCore {
@@ -43,28 +59,8 @@ export class ContentDBTable extends ContentCore {
     id = null;
     time = DateUtils.toISO(DateUtils.defaultDate(conf.start, conf.end));
     approved = false;
-    constructor(data: Content | ContentDraft) {
+    constructor() {
         super();
-        if (data instanceof Content) {
-            return {
-                ...data,
-                time: DateUtils.toISO(data.time)
-            } satisfies ContentDBTable;
-        } else {
-            let id: string | null;
-            let match = data.url.match(/(?<=\/|v=|^)([A-Za-z0-9_-]{11})(?=\?|&|$)/);
-            if (match) {
-                id = match[0];
-            } else {
-                id = null;
-            }
-            return {
-                ...data,
-                key: ulid(),
-                id,
-                approved: false
-            } satisfies ContentDBTable;
-        }
     }
 }
 
@@ -74,6 +70,7 @@ declare class Content extends ContentCore {
     time: Date;
     approved: boolean;
     constructor(data: ContentDBTable);
+    to_table(): ContentDBTable;
 }
 
 export class Content extends ContentCore {
@@ -88,6 +85,12 @@ export class Content extends ContentCore {
             time: new Date(data.time),
             approved: false
         };
+    }
+    to_table() {
+        return {
+            ...this,
+            time: DateUtils.toISO(this.time)
+        } satisfies ContentDBTable;
     }
 }
 

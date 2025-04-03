@@ -13,10 +13,10 @@
 	import { DateUtils } from '$lib/date';
     import { Content, ContentDBTable, ContentDraft } from "~/src/types/content.d";
 
-    let vinfo: HTMLDialogElement = $state();
-    let addcontent: HTMLDialogElement = $state();
-    let sending: HTMLDialogElement = $state();
-    let sent: HTMLDialogElement = $state();
+    let vinfo: HTMLDialogElement;
+    let addcontent: HTMLDialogElement;
+    let sending: HTMLDialogElement;
+    let sent: HTMLDialogElement;
 
     let loaded = $state(false);
     
@@ -42,7 +42,7 @@
         }
     });
 
-    let vinfo_content = $state(new Content(new ContentDBTable(new ContentDraft())));
+    let vinfo_content = $state(new Content((new ContentDraft()).to_table()));
     const openvinfo = (_c: Content) => {
         vinfo_content = _c;
         vinfo.showModal();
@@ -55,7 +55,7 @@
         sending.showModal();
         let res = await (await fetch("/api/db/insert", {
             method: "POST",
-            body: JSON.stringify(new ContentDBTable(acontent))
+            body: JSON.stringify(acontent.to_table())
         })).json() satisfies Array<Content>;
         acontent = new ContentDraft();
         contents = res ? res : contents;

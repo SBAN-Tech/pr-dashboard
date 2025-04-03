@@ -31,8 +31,8 @@
         }
     ];
 
-    let hamburger: HTMLDivElement = $state();
-    let wrapper: HTMLDivElement = $state();
+    let hamburger: HTMLDivElement;
+    let wrapper: HTMLDivElement;
 
     const hamburger_o = () => {
         hamburger.classList.add("hamburger-open");
