@@ -17,16 +17,16 @@
     </a>
     <p class="text-xl">ダッシュボード</p>
     {#if page.data.session}
-        <SignOut>
-            <button title="ログアウト" class="pr_icon_button text-xl ml-auto">
+        <SignOut title="ログアウト" class="pr_icon_button_outer text-xl ml-auto">
+            <div slot="submitButton">
                 <Icon icon="heroicons:arrow-left-start-on-rectangle-solid" />
-            </button>
+            </div>
         </SignOut>
     {:else}
-        <SignIn>
-            <button title="ログイン" class="pr_icon_button text-xl ml-auto">
+        <SignIn title="ログイン" class="pr_icon_button_outer text-xl ml-auto">
+            <div slot="submitButton">
                 <Icon icon="heroicons:arrow-left-end-on-rectangle-solid" />
-            </button>
+            </div>
         </SignIn>
     {/if}
 

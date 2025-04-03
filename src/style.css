@@ -264,15 +264,15 @@ dialog::backdrop, dialog + .backdrop {
     @apply bg-black/30 backdrop-blur-sm;
 }
 
-.pr_icon_button {
+.pr_icon_button, .pr_icon_button_outer button {
     @apply text-[currentColor] border-none bg-transparent w-auto min-h-0 p-0;
 }
 
-.pr_icon_button:not(:disabled):is(:hover, :focus, :active) {
+:is(.pr_icon_button, .pr_icon_button_outer button):not(:disabled):is(:hover, :focus, :active) {
     @apply shadow-none text-[--primary-600] dark:text-[--primary-400];
 }
 
-.pr_icon_button:disabled {
+:is(.pr_icon_button, .pr_icon_button_outer button):disabled {
     @apply text-[currentColor] opacity-50 bg-transparent;
 }
 
