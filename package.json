@@ -62,6 +62,6 @@
     "svelte-exmarkdown": "^3.0.5",
     "ulidx": "^2.4.0",
     "vite-plugin-toml": "^0.7.0",
-    "wrangler": "^3.72.1"
+    "wrangler": "^4.7.0"
   }
 }

@@ -42,7 +42,7 @@
         }
     });
 
-    let vinfo_content = $state(new Content((new ContentDraft()).to_table()));
+    let vinfo_content = $state(new Content((new ContentDraft()).build_table()));
     const openvinfo = (_c: Content) => {
         vinfo_content = _c;
         vinfo.showModal();
@@ -55,7 +55,7 @@
         sending.showModal();
         let res = await (await fetch("/api/db/insert", {
             method: "POST",
-            body: JSON.stringify(acontent.to_table())
+            body: JSON.stringify(acontent.build_table())
         })).json() satisfies Array<Content>;
         acontent = new ContentDraft();
         contents = res ? res : contents;

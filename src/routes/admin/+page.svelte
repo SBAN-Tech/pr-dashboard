@@ -8,7 +8,7 @@
 	import { browser } from '$app/environment';
 	import { ContentUtils } from '$lib/content';
 	import { DateUtils } from '$lib/date';
-    import { ContentDBTable, ContentDraft, Content } from "~/src/types/content.d";
+    import { ContentDraft, Content, ContentDBTable } from "~/src/types/content.d";
 
     let editdialog: HTMLDialogElement;
     let updating: HTMLDialogElement;
@@ -60,12 +60,12 @@
         scontents = filteringnotapproved ? scontents.filter((c) => !c.approved) : scontents;
     }
 
-    let editing = $state((new ContentDraft()).to_table());
+    let editing = $state((new ContentDraft()).build_table());
     let editing_key = "";
     let available = $derived(ContentUtils.isAvailable(editing));
     const edit = (econtent: Content) => {
         editing_key = econtent.key;
-        editing = econtent.to_table();
+        editing = new ContentDBTable(econtent);
         editdialog.showModal();
     };
     const update = async () => {
@@ -89,7 +89,7 @@
         removed.showModal();
     };
     const postupdate = () => {
-        editing = (new ContentDraft()).to_table();
+        editing = (new ContentDraft()).build_table();
         content_devided_by_date = ContentUtils.devideByDate(contents);
         search();
         filternotapproved();

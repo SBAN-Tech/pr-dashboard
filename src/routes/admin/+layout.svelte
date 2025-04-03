@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
     import Icon from '@iconify/svelte';
-    import { signIn, signOut } from "@auth/sveltekit/client";
+    import { SignIn, SignOut } from '@auth/sveltekit/components';
     interface Props {
         children?: import('svelte').Snippet;
     }
@@ -16,14 +16,18 @@
         </button>
     </a>
     <p class="text-xl">ダッシュボード</p>
-    {#if page.data.session?.user}
-        <button title="ログアウト" class="pr_icon_button text-xl ml-auto" onclick={() => signOut()}>
-            <Icon icon="heroicons:arrow-left-start-on-rectangle-solid" />
-        </button>
+    {#if page.data.session}
+        <SignOut>
+            <button title="ログアウト" class="pr_icon_button text-xl ml-auto">
+                <Icon icon="heroicons:arrow-left-start-on-rectangle-solid" />
+            </button>
+        </SignOut>
     {:else}
-        <button title="ログイン" class="pr_icon_button text-xl ml-auto" onclick={() => signIn()}>
-            <Icon icon="heroicons:arrow-left-end-on-rectangle-solid" />
-        </button>
+        <SignIn>
+            <button title="ログイン" class="pr_icon_button text-xl ml-auto">
+                <Icon icon="heroicons:arrow-left-end-on-rectangle-solid" />
+            </button>
+        </SignIn>
     {/if}
 
 </header>

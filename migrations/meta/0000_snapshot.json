@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "43ec608d-7953-4360-a6d1-d29cfca74d19",
+  "id": "52c0dde2-8bd7-4ecf-b90d-8102777fd29b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "contents": {
@@ -28,8 +28,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "auther": {
-          "name": "auther",
+        "author": {
+          "name": "author",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
