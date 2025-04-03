@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import Icon from '@iconify/svelte';
     import { signIn, signOut } from "@auth/sveltekit/client";
     interface Props {
@@ -16,7 +16,7 @@
         </button>
     </a>
     <p class="text-xl">ダッシュボード</p>
-    {#if $page.data.session?.user}
+    {#if page.data.session?.user}
         <button title="ログアウト" class="pr_icon_button text-xl ml-auto" onclick={() => signOut()}>
             <Icon icon="heroicons:arrow-left-start-on-rectangle-solid" />
         </button>
