@@ -4,8 +4,12 @@ compatibility_date = "2025-01-06"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
-[site]
-bucket = "./.cloudflare/public"
+[observability]
+enabled = true
+
+[assets]
+binding = "ASSETS"
+directory = ".svelte-kit/cloudflare"
 
 [build]
 command = "bunx vite build"
